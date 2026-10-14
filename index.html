@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Driving Teaching · A to Z guide for driving instructors</title>
+  <meta name="description" content="A to Z guide for UK driving instructors: teaching methods, every lesson topic, 3D junction and roundabout scenarios, a lesson planner and a Part 3 self-assessment.">
+  <meta name="theme-color" content="#1c1f23">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top" aria-label="Driving Teaching home">
+        <span class="lplate" aria-hidden="true">L</span>
+        <span>Driving Teaching</span>
+      </a>
+      <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" class="nav" aria-label="Main">
+        <a href="#toolkit">Toolkit</a>
+        <a href="#topics">A–Z topics</a>
+        <a href="#lab">3D lab</a>
+        <a href="#planner">Lesson planner</a>
+        <a href="#part3">Part 3 check</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <canvas class="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="wrap hero-content">
+        <p class="eyebrow">For ADIs and trainee instructors</p>
+        <h1>Teach every learner, from first lesson to test day.</h1>
+        <p class="lede">An A to Z of what to teach and how to teach it: client-centred methods, every core topic with common faults and fixes, and 3D scenarios you can pause, scrub and talk through with a pupil.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#lab">Open the 3D lab</a>
+          <a class="btn btn-ghost" href="#topics">Browse topics</a>
+        </div>
+        <dl class="stats">
+          <div><dt>Lesson topics</dt><dd data-count="topics">18</dd></div>
+          <div><dt>3D scenarios</dt><dd>3</dd></div>
+          <div><dt>Part 3 competencies</dt><dd>17</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="toolkit">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">01 · Teaching toolkit</p>
+          <h2>How to teach, before what to teach</h2>
+          <p>The same six habits run through every good lesson. Use them on a quiet estate road or a busy roundabout.</p>
+        </header>
+        <div class="method-grid" data-render="methods"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="topics">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">02 · A to Z topics</p>
+          <h2>Every lesson, with faults and fixes</h2>
+          <p>Pick a topic for key teaching points, common faults with likely causes and remedies, and open questions to ask your pupil.</p>
+        </header>
+        <div class="topic-tools">
+          <div class="chips" role="group" aria-label="Filter by stage" data-render="stage-chips"></div>
+          <label class="search">
+            <span class="sr-only">Search topics</span>
+            <input type="search" placeholder="Search topics, e.g. roundabout" data-topic-search>
+          </label>
+        </div>
+        <ol class="topic-grid" data-render="topics"></ol>
+        <p class="empty" data-topic-empty hidden>No topics match that search.</p>
+      </div>
+    </section>
+
+    <section class="section lab" id="lab">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">03 · 3D scenario lab</p>
+          <h2>Pause the road and talk it through</h2>
+          <p>Use these on a tablet during a briefing. Pause on any step, scrub back, or switch to the driver's view to show what the pupil will actually see.</p>
+        </header>
+        <div class="lab-shell" data-lab-root>
+          <div class="lab-tabs" role="tablist" aria-label="Scenarios">
+            <button role="tab" data-scenario="tjunction">T-junction</button>
+            <button role="tab" data-scenario="roundabout">Roundabout</button>
+            <button role="tab" data-scenario="meeting">Meeting traffic</button>
+          </div>
+          <div class="lab-main">
+            <div class="lab-stage">
+              <canvas class="lab-canvas" aria-label="3D view of the driving scenario"></canvas>
+              <div class="lab-views" role="group" aria-label="Camera">
+                <button data-view="overview" aria-pressed="true">Overview</button>
+                <button data-view="driver" aria-pressed="false">Driver's view</button>
+              </div>
+              <p class="lab-caption" data-lab="caption" aria-live="polite"></p>
+            </div>
+            <aside class="lab-side">
+              <h3 data-lab="title"></h3>
+              <p class="lab-blurb" data-lab="blurb"></p>
+              <ol class="lab-steps" data-lab="steps"></ol>
+            </aside>
+          </div>
+          <div class="lab-controls">
+            <button class="btn btn-small btn-primary" data-lab="play" aria-pressed="false">Play</button>
+            <button class="btn btn-small" data-lab="restart">Restart</button>
+            <input type="range" min="0" max="18" step="0.01" value="0" data-lab="scrub" aria-label="Scenario timeline">
+            <span class="lab-time" data-lab="time">0.0s</span>
+            <button class="btn btn-small" data-lab="speed" aria-label="Playback speed normal">1×</button>
+          </div>
+          <p class="lab-note" data-lab-fallback hidden>The 3D lab needs WebGL, which this browser has turned off. Try an up-to-date Chrome, Safari or Firefox.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="stopping">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">04 · Briefing aid</p>
+          <h2>Stopping distances</h2>
+          <p>Typical figures from the Highway Code for a dry road. Double them in the wet and allow up to ten times on ice.</p>
+        </header>
+        <div class="stop-toggle chips" role="group" aria-label="Road surface">
+          <button class="chip" aria-pressed="true" data-surface="dry">Dry</button>
+          <button class="chip" aria-pressed="false" data-surface="wet">Wet (×2)</button>
+        </div>
+        <div class="stop-chart" data-render="stopping"></div>
+        <p class="legend"><span class="sw sw-think"></span> Thinking distance <span class="sw sw-brake"></span> Braking distance</p>
+      </div>
+    </section>
+
+    <section class="section" id="planner">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">05 · Lesson planner</p>
+          <h2>Build a client-centred lesson plan</h2>
+          <p>Fill in the basics and get a structured plan with timings, a risk talk, key points and questions. Copy it or print it.</p>
+        </header>
+        <div class="planner">
+          <form class="planner-form" data-planner>
+            <label>Pupil's name <input name="pupil" autocomplete="off" placeholder="e.g. Jamil"></label>
+            <label>Topic <select name="topic" data-render="topic-options"></select></label>
+            <label>Pupil's confidence now (1–10)
+              <input name="confidence" type="range" min="1" max="10" value="5">
+              <output name="confOut">5</output>
+            </label>
+            <fieldset>
+              <legend>Level of help to start with</legend>
+              <label class="radio"><input type="radio" name="help" value="led" checked> Instructor-led</label>
+              <label class="radio"><input type="radio" name="help" value="prompted"> Prompted</label>
+              <label class="radio"><input type="radio" name="help" value="independent"> Pupil-led</label>
+            </fieldset>
+            <div class="row-2">
+              <label>Length
+                <select name="length"><option value="60">60 min</option><option value="90">90 min</option><option value="120" selected>120 min</option></select>
+              </label>
+              <label>Weather
+                <select name="weather"><option value="dry">Dry</option><option value="wet">Wet</option></select>
+              </label>
+            </div>
+          </form>
+          <article class="plan" data-plan aria-live="polite"></article>
+        </div>
+        <div class="plan-actions">
+          <button class="btn btn-small" data-plan-copy>Copy plan</button>
+          <button class="btn btn-small" data-plan-print>Print</button>
+          <span class="toast" data-toast role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="part3">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">06 · Part 3 and standards check</p>
+          <h2>Score a lesson like the examiner</h2>
+          <p>Rate each of the 17 competencies from 0 to 3 after a practice lesson. Scores save in this browser only.</p>
+        </header>
+        <div class="p3">
+          <div class="p3-list" data-render="competencies"></div>
+          <aside class="p3-result" data-p3-result aria-live="polite"></aside>
+        </div>
+        <p class="fine">Bands from GOV.UK: 0–30 fail, 31–42 grade B, 43–51 grade A. Scoring 7 or less on risk management is a fail whatever the total. Always check the latest DVSA guidance.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p><span class="lplate small" aria-hidden="true">L</span> Driving Teaching. Built by Mohammed Ali.</p>
+      <p class="fine">A teaching aid, not official guidance. Not affiliated with DVSA. Check the Highway Code and DVSA publications for the current rules.</p>
+    </div>
+  </footer>
+
+  <dialog class="topic-dialog" data-topic-dialog aria-labelledby="dlg-title">
+    <div class="dlg-inner" data-topic-body></div>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
