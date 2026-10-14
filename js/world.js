@@ -1,6 +1,6 @@
 // Shared low-poly building blocks for the 3D scenes.
 // Units are metres. Cars are built facing +z; Object3D.lookAt() aims +z at a target.
-import * as THREE from 'three';
+import * as THREE from '../vendor/three.module.min.js';
 
 export const PALETTE = {
   grass: 0x6f8f4e,
@@ -22,7 +22,8 @@ export function makeLights(scene, { sunPos = [30, 50, 20], shadowSize = 60 } = {
   const sun = new THREE.DirectionalLight(0xfff1dc, 2.1);
   sun.position.set(...sunPos);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  const small = Math.min(window.innerWidth, window.innerHeight) < 700;
+  sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
   const c = sun.shadow.camera;
   c.left = c.bottom = -shadowSize;
   c.right = c.top = shadowSize;
@@ -128,11 +129,13 @@ export function car(color, { learner = false } = {}) {
   for (const m of [body, cabin, roof]) { m.castShadow = true; g.add(m); }
 
   const tyre = mat(0x16181b);
-  for (const [x, z] of [[0.82, 1.3], [-0.82, 1.3], [0.82, -1.3], [-0.82, -1.3]]) {
+  const wheels = {};
+  for (const [key, x, z] of [['fl', 0.82, 1.3], ['fr', -0.82, 1.3], ['rl', 0.82, -1.3], ['rr', -0.82, -1.3]]) {
     const w = new THREE.Mesh(wheelGeo, tyre);
     w.position.set(x, 0.33, z);
     w.castShadow = true;
     g.add(w);
+    wheels[key] = w;
   }
 
   // Lights. Car faces +z, so its left side is +x.
@@ -173,8 +176,76 @@ export function car(color, { learner = false } = {}) {
     g.add(sign);
   }
 
-  g.userData = { indicators, brakeMat };
+  g.userData = { indicators, brakeMat, wheels, body, cabin, roof };
   return g;
+}
+
+// Front wheel steering angle in radians (positive = left).
+export function steerWheels(c, angle) {
+  const { fl, fr } = c.userData.wheels;
+  fl.rotation.y = angle;
+  fr.rotation.y = angle;
+}
+
+// A simple low-poly person, about 1.75 m tall.
+export function person(color = 0x2f6fb0) {
+  const g = new THREE.Group();
+  const clothes = mat(color);
+  const legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.85, 0.22), mat(0x2b2f36));
+  legs.position.y = 0.43;
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.62, 0.26), clothes);
+  torso.position.y = 1.16;
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 12, 10), mat(0xc69a7a));
+  head.position.y = 1.62;
+  for (const m of [legs, torso, head]) { m.castShadow = true; g.add(m); }
+  return g;
+}
+
+// A cyclist on a bike, facing +z.
+export function cyclist(color = 0xd63a2f) {
+  const g = new THREE.Group();
+  const frameMat = mat(0x222222);
+  const wheel = new THREE.TorusGeometry(0.33, 0.04, 6, 20);
+  wheel.rotateY(Math.PI / 2);
+  for (const z of [0.55, -0.55]) {
+    const w = new THREE.Mesh(wheel, frameMat);
+    w.position.set(0, 0.36, z);
+    g.add(w);
+  }
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 1.1), mat(color));
+  frame.position.set(0, 0.62, 0);
+  g.add(frame);
+  const rider = person(color);
+  rider.scale.set(0.95, 0.8, 0.95);
+  rider.position.set(0, 0.3, -0.1);
+  rider.rotation.x = 0.35;
+  g.add(rider);
+  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}
+
+// Traffic light head on a pole. Returns { group, set(state) } where state is 'red' | 'amber' | 'green' | 'redamber'.
+export function trafficLight() {
+  const g = new THREE.Group();
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 3, 8), mat(0x2b2f36));
+  pole.position.y = 1.5;
+  const head = new THREE.Mesh(new THREE.BoxGeometry(0.42, 1.1, 0.3), mat(0x1a1c1f));
+  head.position.set(0, 3.2, 0);
+  g.add(pole, head);
+  const lamps = {};
+  for (const [name, color, y] of [['red', 0xff2b2b, 3.55], ['amber', 0xffae1a, 3.2], ['green', 0x2bff6a, 2.85]]) {
+    const m = new THREE.Mesh(new THREE.CircleGeometry(0.12, 16), new THREE.MeshStandardMaterial({ color: 0x222222, emissive: color, emissiveIntensity: 0 }));
+    m.position.set(0, y, 0.16);
+    g.add(m);
+    lamps[name] = m;
+  }
+  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  const set = (state) => {
+    lamps.red.material.emissiveIntensity = state === 'red' || state === 'redamber' ? 2.5 : 0;
+    lamps.amber.material.emissiveIntensity = state === 'amber' || state === 'redamber' ? 2.5 : 0;
+    lamps.green.material.emissiveIntensity = state === 'green' ? 2.5 : 0;
+  };
+  return { group: g, set };
 }
 
 let _plate;
@@ -204,7 +275,7 @@ export function setCarLights(c, { signal = null, braking = false, time = 0 }) {
 
 export function makeRenderer(canvas) {
   const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
-  r.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  r.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 700 ? 1.5 : 2));
   r.shadowMap.enabled = true;
   r.shadowMap.type = THREE.PCFSoftShadowMap;
   r.outputColorSpace = THREE.SRGBColorSpace;

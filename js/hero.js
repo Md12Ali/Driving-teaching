@@ -1,5 +1,5 @@
 // Hero scene: a learner car driving a loop through a small low-poly town.
-import * as THREE from 'three';
+import * as THREE from '../vendor/three.module.min.js';
 import { PALETTE, makeLights, ground, car, house, tree, seeded, setCarLights, makeRenderer, fitToCanvas } from './world.js';
 
 const ROAD_W = 6.4;

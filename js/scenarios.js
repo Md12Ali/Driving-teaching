@@ -2,7 +2,7 @@
 // UK roads: traffic drives on the left. North is -z, east is +x.
 // Paths are lists of [x, z] points. Keys are [time, distance, ease?] where distance can be a
 // number, 'end', or a marker name with an optional offset ('hold', 'hold+30', 'pass-60').
-import * as THREE from 'three';
+import * as THREE from '../vendor/three.module.min.js';
 import { PALETTE, road, giveWayLine, house, tree, seeded, slab } from './world.js';
 
 function street(group, rnd, { xs = [], zs = [], along = 'z', from, to, spacing = 9 }) {

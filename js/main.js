@@ -1,12 +1,50 @@
 import { TOPICS, METHODS, STAGES, COMPETENCIES, SCORE_LABELS, STOPPING } from './data.js';
+import { LANGS, MORE_LANGS, setLang, savedLang, onLang, t, topicText, labels, googleTranslateUrl, lang } from './i18n.js';
+import { diagram } from './diagrams.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage off */ } },
 };
+const STAGE_KEY = { foundation: 'stageFoundation', core: 'stageCore', advanced: 'stageAdvanced' };
+
+/* ---------- Mode: learner or instructor ---------- */
+let mode = store.get('dt-mode', 'learner');
+function setMode(m) {
+  mode = m === 'instructor' ? 'instructor' : 'learner';
+  store.set('dt-mode', mode);
+  document.body.classList.toggle('mode-learner', mode === 'learner');
+  document.body.classList.toggle('mode-instructor', mode === 'instructor');
+  $$('[data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+  renderHero();
+}
+$$('[data-mode]').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+function renderHero() {
+  const k = mode === 'learner' ? 'Learner' : 'Instructor';
+  $('[data-hero=eyebrow]').textContent = t(`heroEyebrow${k}`);
+  $('[data-hero=title]').textContent = t(`heroTitle${k}`);
+  $('[data-hero=lede]').textContent = t(`heroLede${k}`);
+}
+
+/* ---------- Language picker ---------- */
+const langSelect = $('[data-lang-select]');
+langSelect.innerHTML = LANGS.map((l) => `<option value="${l.code}">${esc(l.name)}</option>`).join('') +
+  `<optgroup label="${esc(t('moreLanguages'))}">${MORE_LANGS.map(([c, n]) => `<option value="gt:${c}">${esc(n)}</option>`).join('')}</optgroup>`;
+langSelect.addEventListener('change', () => {
+  const v = langSelect.value;
+  if (v.startsWith('gt:')) {
+    langSelect.value = lang();
+    window.location.href = googleTranslateUrl(v.slice(3));
+    return;
+  }
+  setLang(v);
+});
+$('[data-count=langs]').textContent = `${LANGS.length}+`;
+$('[data-count=topics]').textContent = TOPICS.length;
 
 /* ---------- Navigation ---------- */
 const menuBtn = $('.menu-btn');
@@ -27,99 +65,134 @@ const sectionObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 $$('main > section[id]').forEach((s) => sectionObserver.observe(s));
 
-$('[data-count=topics]').textContent = TOPICS.length;
-
-/* ---------- Toolkit ---------- */
-$('[data-render=methods]').innerHTML = METHODS.map((m, i) => `
-  <article class="method">
-    <span class="method-n">${String(i + 1).padStart(2, '0')}</span>
-    <h3>${esc(m.title)}</h3>
-    <p>${esc(m.body)}</p>
-    <p class="try"><span>Try</span>${esc(m.try)}</p>
-  </article>`).join('');
-
-/* ---------- Topics ---------- */
+/* ---------- Lessons ---------- */
 let stageFilter = 'all';
+let done = new Set(store.get('dt-done', []));
 const chips = $('[data-render=stage-chips]');
-chips.innerHTML = [['all', 'All'], ...Object.entries(STAGES).map(([k, v]) => [k, v.label])]
-  .map(([k, label]) => `<button class="chip" data-stage="${k}" aria-pressed="${k === 'all'}">${esc(label)}</button>`).join('');
+function renderChips() {
+  chips.innerHTML = [['all', t('stageAll')], ...Object.keys(STAGES).map((k) => [k, t(STAGE_KEY[k])])]
+    .map(([k, label]) => `<button class="chip" data-stage="${k}" aria-pressed="${k === stageFilter}">${esc(label)}</button>`).join('');
+}
 chips.addEventListener('click', (e) => {
   const b = e.target.closest('[data-stage]');
   if (!b) return;
   stageFilter = b.dataset.stage;
-  $$('[data-stage]', chips).forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+  renderChips();
   renderTopics();
 });
 const search = $('[data-topic-search]');
 search.addEventListener('input', renderTopics);
 
+function renderProgress() {
+  const n = TOPICS.filter((x) => done.has(x.id)).length;
+  $('[data-progress-fill]').style.width = `${(n / TOPICS.length) * 100}%`;
+  $('[data-progress-text]').textContent = t('progress', { done: n, total: TOPICS.length });
+}
+
 function renderTopics() {
   const q = search.value.trim().toLowerCase();
-  const list = TOPICS.filter((t) => (stageFilter === 'all' || t.stage === stageFilter) &&
-    (!q || [t.title, t.summary, ...t.keyPoints].join(' ').toLowerCase().includes(q)));
-  $('[data-render=topics]').innerHTML = list.map((t) => `
-    <li>
-      <button class="topic" data-topic="${t.id}">
-        <span class="topic-n">${String(TOPICS.indexOf(t) + 1).padStart(2, '0')}</span>
-        <span class="topic-stage stage-${t.stage}">${esc(STAGES[t.stage].label)}</span>
-        <span class="topic-title">${esc(t.title)}</span>
-        <span class="topic-sum">${esc(t.summary)}</span>
-        ${t.scenario ? '<span class="topic-3d">3D scenario</span>' : ''}
+  const L = labels();
+  const list = TOPICS.filter((x) => {
+    if (stageFilter !== 'all' && x.stage !== stageFilter) return false;
+    if (!q) return true;
+    const s = topicText(x.id);
+    return [s.title, s.simple, ...(s.steps || []), x.title, x.summary].join(' ').toLowerCase().includes(q);
+  });
+  $('[data-render=topics]').innerHTML = list.map((x) => {
+    const s = topicText(x.id);
+    return `<li>
+      <button class="topic${done.has(x.id) ? ' is-done' : ''}" data-topic="${x.id}">
+        <span class="topic-pic">${diagram(x.id, L)}</span>
+        <span class="topic-body">
+          <span class="topic-meta"><span class="topic-n">${String(TOPICS.indexOf(x) + 1).padStart(2, '0')}</span>
+            <span class="topic-stage stage-${x.stage}">${esc(t(STAGE_KEY[x.stage]))}</span>
+            ${done.has(x.id) ? '<span class="topic-done" aria-label="done">✓</span>' : ''}</span>
+          <span class="topic-title">${esc(s.title)}</span>
+          <span class="topic-sum">${esc(s.simple)}</span>
+          ${x.scenario ? `<span class="topic-3d">${esc(t('watch3d'))}</span>` : ''}
+        </span>
       </button>
-    </li>`).join('');
+    </li>`;
+  }).join('');
   $('[data-topic-empty]').hidden = list.length > 0;
+  renderProgress();
 }
-renderTopics();
 
 const dialog = $('[data-topic-dialog]');
+const openDialog = () => (dialog.showModal ? dialog.showModal() : dialog.setAttribute('open', ''));
+const closeDialog = () => (dialog.close ? dialog.close() : dialog.removeAttribute('open'));
+let openTopicId = null;
+
 $('[data-render=topics]').addEventListener('click', (e) => {
   const b = e.target.closest('[data-topic]');
   if (b) openTopic(b.dataset.topic);
 });
+
 function openTopic(id) {
-  const t = TOPICS.find((x) => x.id === id);
+  openTopicId = id;
+  const x = TOPICS.find((k) => k.id === id);
+  const s = topicText(id);
+  const isDone = done.has(id);
+  const instructor = mode === 'instructor' ? `
+    <details class="inst-notes" open lang="en" dir="ltr">
+      <summary>${esc(t('instructorNotes'))}</summary>
+      <h3>Key teaching points</h3>
+      <ul class="ticks">${x.keyPoints.map((k) => `<li>${esc(k)}</li>`).join('')}</ul>
+      <h3>Common faults</h3>
+      <div class="faults">${x.faults.map((f) => `
+        <div class="fault">
+          <p><span class="tag tag-fault">Fault</span>${esc(f.fault)}</p>
+          <p><span class="tag tag-cause">Likely cause</span>${esc(f.cause)}</p>
+          <p><span class="tag tag-fix">Remedy</span>${esc(f.remedy)}</p>
+        </div>`).join('')}</div>
+      <h3>Questions to ask</h3>
+      <ul class="quotes">${x.questions.map((q) => `<li>${esc(q)}</li>`).join('')}</ul>
+      <button class="btn btn-small" data-go-plan="${x.id}">Plan a lesson on this</button>
+    </details>` : '';
   $('[data-topic-body]').innerHTML = `
     <header class="dlg-head">
       <div>
-        <p class="kicker">${esc(STAGES[t.stage].label)}</p>
-        <h2 id="dlg-title">${esc(t.title)}</h2>
-        <p>${esc(t.summary)}</p>
+        <p class="kicker">${esc(t(STAGE_KEY[x.stage]))}</p>
+        <h2 id="dlg-title">${esc(s.title)}</h2>
       </div>
-      <button class="dlg-close" data-close aria-label="Close">×</button>
+      <button class="dlg-close" data-close aria-label="${esc(t('close'))}">×</button>
     </header>
-    <h3>Key teaching points</h3>
-    <ul class="ticks">${t.keyPoints.map((k) => `<li>${esc(k)}</li>`).join('')}</ul>
-    <h3>Common faults</h3>
-    <div class="faults">${t.faults.map((f) => `
-      <div class="fault">
-        <p><span class="tag tag-fault">Fault</span>${esc(f.fault)}</p>
-        <p><span class="tag tag-cause">Likely cause</span>${esc(f.cause)}</p>
-        <p><span class="tag tag-fix">Remedy</span>${esc(f.remedy)}</p>
-      </div>`).join('')}</div>
-    <h3>Questions to ask</h3>
-    <ul class="quotes">${t.questions.map((q) => `<li>${esc(q)}</li>`).join('')}</ul>
+    <figure class="dlg-pic">${diagram(id, labels())}</figure>
+    <section class="simple"><h3>${esc(t('lessonSimple'))}</h3><p>${esc(s.simple)}</p></section>
+    <h3>${esc(t('lessonSteps'))}</h3>
+    <ol class="steps-big">${(s.steps || []).map((k) => `<li>${esc(k)}</li>`).join('')}</ol>
+    ${s.tip ? `<p class="remember"><strong>${esc(t('lessonRemember'))}</strong> ${esc(s.tip)}</p>` : ''}
     <div class="dlg-actions">
-      ${t.scenario ? `<button class="btn btn-small btn-primary" data-go-lab="${t.scenario}">Watch it in 3D</button>` : ''}
-      <button class="btn btn-small" data-go-plan="${t.id}">Plan a lesson on this</button>
-    </div>`;
-  dialog.showModal();
+      <button class="btn btn-small ${isDone ? 'btn-done' : ''}" data-toggle-done aria-pressed="${isDone}">${isDone ? '✓ ' + esc(t('lessonDoneYes')) : esc(t('lessonDone'))}</button>
+      ${x.scenario ? `<button class="btn btn-small btn-primary" data-go-lab="${x.scenario}">${esc(t('watch3d'))}</button>` : ''}
+    </div>
+    ${instructor}`;
+  if (!dialog.open) openDialog();
 }
+
 dialog.addEventListener('click', (e) => {
-  if (e.target === dialog || e.target.closest('[data-close]')) dialog.close();
-  const lab = e.target.closest('[data-go-lab]');
-  if (lab) {
-    dialog.close();
-    $(`[data-scenario="${lab.dataset.goLab}"]`).click();
+  if (e.target === dialog || e.target.closest('[data-close]')) closeDialog();
+  if (e.target.closest('[data-toggle-done]')) {
+    if (done.has(openTopicId)) done.delete(openTopicId); else done.add(openTopicId);
+    store.set('dt-done', [...done]);
+    openTopic(openTopicId);
+    renderTopics();
+  }
+  const labBtn = e.target.closest('[data-go-lab]');
+  if (labBtn) {
+    closeDialog();
+    $(`[data-scenario="${labBtn.dataset.goLab}"]`).click();
     $('#lab').scrollIntoView({ behavior: 'smooth' });
   }
   const plan = e.target.closest('[data-go-plan]');
   if (plan) {
-    dialog.close();
+    closeDialog();
     form.topic.value = plan.dataset.goPlan;
     renderPlan();
     $('#planner').scrollIntoView({ behavior: 'smooth' });
   }
 });
+dialog.addEventListener('close', () => { openTopicId = null; });
 
 /* ---------- Stopping distances ---------- */
 let surface = 'dry';
@@ -128,11 +201,12 @@ function renderStopping() {
   const max = (21 + 75) * 2;
   $('[data-render=stopping]').innerHTML = STOPPING.map((s) => {
     const think = s.think, brake = s.brake * k, total = think + brake;
+    const cars = Math.round(total / 4);
     return `<div class="stop-row">
-      <span class="stop-mph">${s.mph} mph</span>
-      <span class="stop-bar" role="img" aria-label="${s.mph} mph: thinking ${think} metres, braking ${brake} metres, total ${total} metres">
+      <span class="stop-mph">${s.mph} ${esc(t('mph'))}</span>
+      <span class="stop-bar" role="img" aria-label="${s.mph} ${esc(t('mph'))}: ${esc(t('thinking'))} ${think} ${esc(t('metres'))}, ${esc(t('braking'))} ${brake} ${esc(t('metres'))}">
         <span class="b-think" style="width:${(think / max) * 100}%"></span><span class="b-brake" style="width:${(brake / max) * 100}%"></span>
-        <span class="stop-total">${total} m</span>
+        <span class="stop-total">${total} ${esc(t('metres'))} <small>· ${esc(t('carLengths', { n: cars }))}</small></span>
       </span>
     </div>`;
   }).join('');
@@ -144,19 +218,23 @@ $('.stop-toggle').addEventListener('click', (e) => {
   $$('[data-surface]').forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
   renderStopping();
 });
-renderStopping();
+
+/* ---------- Instructor toolkit ---------- */
+$('[data-render=methods]').innerHTML = METHODS.map((m, i) => `
+  <article class="method">
+    <span class="method-n">${String(i + 1).padStart(2, '0')}</span>
+    <h3>${esc(m.title)}</h3>
+    <p>${esc(m.body)}</p>
+    <p class="try"><span>Try</span>${esc(m.try)}</p>
+  </article>`).join('');
 
 /* ---------- Lesson planner ---------- */
 const form = $('[data-planner]');
 form.topic.innerHTML = Object.entries(STAGES).map(([k, v]) => `
-  <optgroup label="${esc(v.label)}">${TOPICS.filter((t) => t.stage === k).map((t) => `<option value="${t.id}">${esc(t.title)}</option>`).join('')}</optgroup>`).join('');
+  <optgroup label="${esc(v.label)}">${TOPICS.filter((x) => x.stage === k).map((x) => `<option value="${x.id}">${esc(x.title)}</option>`).join('')}</optgroup>`).join('');
 form.topic.value = 'meeting';
 const saved = store.get('dt-planner', null);
-if (saved) for (const [k, v] of Object.entries(saved)) {
-  const el = form.elements[k];
-  if (!el) continue;
-  if (el instanceof RadioNodeList) el.value = v; else el.value = v;
-}
+if (saved) for (const [k, v] of Object.entries(saved)) { const el = form.elements[k]; if (el) el.value = v; }
 
 const HELP = {
   led: { label: 'instructor-led', text: 'I\'ll talk you through the first few, then we\'ll see how you feel about taking over.' },
@@ -168,62 +246,50 @@ function renderPlan() {
   const f = Object.fromEntries(new FormData(form));
   store.set('dt-planner', f);
   form.confOut.value = f.confidence;
-  const t = TOPICS.find((x) => x.id === f.topic);
+  const x = TOPICS.find((k) => k.id === f.topic);
   const name = f.pupil.trim() || 'your pupil';
   const L = parseInt(f.length, 10);
   const m = (p) => Math.max(5, Math.round((L * p) / 5) * 5);
-  const blocks = [
-    ['Recap and goal setting', m(0.1)],
-    ['Briefing', m(0.1)],
-    ['Practice: guided', m(0.25)],
-    ['Practice: pupil-led', 0],
-    ['Reflection and next steps', m(0.1)],
-  ];
+  const blocks = [['Recap and goal setting', m(0.1)], ['Briefing', m(0.1)], ['Practice: guided', m(0.25)], ['Practice: pupil-led', 0], ['Reflection and next steps', m(0.1)]];
   blocks[3][1] = L - blocks.reduce((a, b) => a + b[1], 0);
   let clock = 0;
   const times = blocks.map(([, mins]) => { const s = clock; clock += mins; return `${s}–${clock}`; });
   const help = HELP[f.help];
   const target = Math.min(10, parseInt(f.confidence, 10) + 3);
-  const plan = `
+  $('[data-plan]').innerHTML = `
     <header class="plan-head">
-      <p class="kicker">${L} minute lesson · ${esc(f.weather === 'wet' ? 'wet roads' : 'dry roads')}</p>
-      <h3>${esc(t.title)} with ${esc(name)}</h3>
+      <p class="kicker">${L} minute lesson · ${f.weather === 'wet' ? 'wet roads' : 'dry roads'}</p>
+      <h3>${esc(x.title)} with ${esc(name)}</h3>
     </header>
+    <figure class="plan-pic">${diagram(x.id, labels())}</figure>
     <ol class="plan-steps">
       <li><span class="pt">${times[0]} min</span><div><strong>${blocks[0][0]}</strong>
-        <p>Ask how the last lesson felt and what ${esc(name)} wants from today. Agree the goal together: <em>${esc(t.summary)}</em></p>
+        <p>Ask how the last lesson felt and what ${esc(name)} wants from today. Agree the goal together: <em>${esc(x.summary)}</em></p>
         <p>Confidence check: ${esc(name)} says ${f.confidence}/10. Aim for about ${target}/10 by the end.</p></div></li>
       <li><span class="pt">${times[1]} min</span><div><strong>${blocks[1][0]}</strong>
-        <p>Use a diagram or the 3D lab. Draw out what ${esc(name)} already knows with questions, then fill the gaps:</p>
-        <ul>${t.keyPoints.slice(0, 4).map((k) => `<li>${esc(k)}</li>`).join('')}</ul>
+        <p>Use the picture above or the 3D practice. Draw out what ${esc(name)} already knows with questions, then fill the gaps:</p>
+        <ul>${x.keyPoints.slice(0, 4).map((k) => `<li>${esc(k)}</li>`).join('')}</ul>
         <p><strong>Risk talk:</strong> "You're driving and making the decisions. ${esc(help.text)} If I need to use the dual brake or take the wheel, I'll explain why when we stop."</p>
         ${f.weather === 'wet' ? '<p><strong>Wet roads:</strong> stopping distances at least double, so leave a four-second gap and brake earlier.</p>' : ''}</div></li>
       <li><span class="pt">${times[2]} min</span><div><strong>${blocks[2][0]}</strong>
         <p>Start ${esc(help.label)} on a quiet route. Reduce help as soon as ${esc(name)} gets it right twice in a row.</p>
-        <p>Watch for: ${t.faults.map((x) => esc(x.fault.toLowerCase())).join('; ')}.</p></div></li>
+        <p>Watch for: ${x.faults.map((k) => esc(k.fault.toLowerCase())).join('; ')}.</p></div></li>
       <li><span class="pt">${times[3]} min</span><div><strong>${blocks[3][0]}</strong>
         <p>Move to a busier route. ${esc(name)} leads. Pull up for anything safety-critical and use identify, analyse, remedy:</p>
-        <ul>${t.faults.map((x) => `<li>${esc(x.fault)} → ${esc(x.remedy)}</li>`).join('')}</ul></div></li>
+        <ul>${x.faults.map((k) => `<li>${esc(k.fault)} → ${esc(k.remedy)}</li>`).join('')}</ul></div></li>
       <li><span class="pt">${times[4]} min</span><div><strong>${blocks[4][0]}</strong>
         <p>Ask before you tell:</p>
-        <ul>${t.questions.map((q) => `<li>${esc(q)}</li>`).join('')}<li>What went well, and what would you like to work on next time?</li></ul>
+        <ul>${x.questions.map((q) => `<li>${esc(q)}</li>`).join('')}<li>What went well, and what would you like to work on next time?</li></ul>
         <p>New confidence score, then agree the next lesson.</p></div></li>
     </ol>`;
-  $('[data-plan]').innerHTML = plan;
 }
 form.addEventListener('input', renderPlan);
 form.addEventListener('submit', (e) => e.preventDefault());
-renderPlan();
 
 const toast = $('[data-toast]');
 const say = (msg) => { toast.textContent = msg; clearTimeout(say.t); say.t = setTimeout(() => (toast.textContent = ''), 2500); };
 $('[data-plan-copy]').addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText($('[data-plan]').innerText);
-    say('Plan copied');
-  } catch {
-    say('Copy is blocked here. Select the text instead.');
-  }
+  try { await navigator.clipboard.writeText($('[data-plan]').innerText); say('Plan copied'); } catch { say('Copy is blocked here. Select the text instead.'); }
 });
 $('[data-plan-print]').addEventListener('click', () => {
   document.body.classList.add('print-plan');
@@ -286,19 +352,48 @@ $('[data-p3-result]').addEventListener('click', (e) => {
   $$('.p3-list input:checked').forEach((i) => (i.checked = false));
   renderP3();
 });
-renderP3();
 
-/* ---------- 3D (loaded last so the page works without WebGL) ---------- */
+/* ---------- Re-render on language change ---------- */
+let lab = null;
+onLang(() => {
+  langSelect.value = lang();
+  renderHero();
+  renderChips();
+  renderTopics();
+  renderStopping();
+  renderPlan();
+  if (openTopicId) openTopic(openTopicId);
+  lab?.refreshText();
+});
+
+/* ---------- Start ---------- */
+setMode(mode);
+renderPlan();
+renderP3();
+setLang(savedLang()).then(() => { langSelect.value = lang(); });
+
+/* ---------- 3D (loaded last so the page works without it) ---------- */
 function webglOK() {
-  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
+  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')); } catch { return false; }
+}
+function labFailed(err) {
+  if (err) console.error('3D lab failed', err);
+  $('[data-lab-fallback]').hidden = false;
+  $('[data-lab-status]').hidden = true;
+  document.body.classList.add('no-webgl-lab');
+  // Still show the steps as text so the section is useful.
+  import('./scenarios-text.js').then(({ renderStaticSteps }) => renderStaticSteps($('[data-lab-root]'))).catch(() => {});
 }
 if (webglOK()) {
-  import('./hero.js').then(({ startHero }) => startHero($('.hero-canvas'))).catch((err) => console.error('Hero failed', err));
-  import('./lab.js').then(({ Lab }) => new Lab($('[data-lab-root]'))).catch((err) => {
-    console.error('Lab failed', err);
-    $('[data-lab-fallback]').hidden = false;
+  import('./hero.js').then(({ startHero }) => startHero($('.hero-canvas'))).catch((err) => {
+    console.error('Hero failed', err);
+    document.body.classList.add('no-webgl-hero');
   });
+  import('./lab.js').then(({ Lab }) => {
+    lab = new Lab($('[data-lab-root]'));
+    $('[data-lab-status]').hidden = true;
+  }).catch(labFailed);
 } else {
-  document.body.classList.add('no-webgl');
-  $('[data-lab-fallback]').hidden = false;
+  document.body.classList.add('no-webgl-hero');
+  labFailed();
 }

@@ -1,7 +1,10 @@
 // 3D scenario lab: plays a scenario on a timeline the user can scrub.
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from '../vendor/three.module.min.js';
+import { OrbitControls } from '../vendor/OrbitControls.js';
 import { SCENARIOS } from './scenarios.js';
+import { scenarioText, t as tr } from './i18n.js';
+
+const escH = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 import { PALETTE, makeLights, ground, car, setCarLights, makeRenderer, fitToCanvas } from './world.js';
 
 const ease = {
@@ -133,7 +136,7 @@ export class Lab {
     speed.addEventListener('click', () => {
       this.speed = this.speed === 1 ? 0.5 : 1;
       speed.textContent = this.speed === 1 ? '1×' : '½×';
-      speed.setAttribute('aria-label', `Playback speed ${this.speed === 1 ? 'normal' : 'half'}`);
+      speed.setAttribute('aria-label', this.speed === 1 ? tr('speedNormal') : tr('speedHalf'));
     });
     tabs.forEach((b) => b.addEventListener('click', () => this.load(b.dataset.scenario)));
     views.forEach((b) => b.addEventListener('click', () => this.setView(b.dataset.view)));
@@ -148,7 +151,7 @@ export class Lab {
   setPlaying(p) {
     this.playing = p;
     if (p && this.time >= this.sc.duration) this.seek(0);
-    this.ui.play.textContent = p ? 'Pause' : 'Play';
+    this.ui.play.textContent = p ? tr('pause') : tr('play');
     this.ui.play.setAttribute('aria-pressed', String(p));
     this.clock.getDelta();
   }
@@ -190,23 +193,41 @@ export class Lab {
     this.learner = this.actors.find((a) => a.def.learner);
     for (const a of this.actors) scene.add(a.mesh);
     this.scene = scene;
-    this.steps = this.sc.steps.map((s) => ({ ...s, t: s.at ? this.learner.timeAt(this.learner.resolve(s.at)) : s.t }));
-
-    this.ui.title.textContent = this.sc.title;
-    this.ui.blurb.textContent = this.sc.blurb;
+    this.scenarioId = id;
+    this.stepTimes = this.sc.steps.map((st) => (st.at ? this.learner.timeAt(this.learner.resolve(st.at)) : st.t));
     this.ui.scrub.max = String(this.sc.duration);
-    this.ui.steps.innerHTML = this.steps.map((s, i) => `
-      <li data-t="${s.t.toFixed(2)}" tabindex="0">
+    this.renderText();
+    this.lastStep = -1;
+    this.resetCamera();
+    this.seek(0);
+    this.setPlaying(!matchMedia('(prefers-reduced-motion: reduce)').matches && this.visibleOnScreen);
+  }
+
+  // Fill the titles and steps in the current language.
+  renderText() {
+    const txt = scenarioText(this.scenarioId);
+    this.steps = this.sc.steps.map((st, i) => ({
+      t: this.stepTimes[i],
+      title: txt.steps?.[i]?.[0] ?? st.title,
+      text: txt.steps?.[i]?.[1] ?? st.text,
+    }));
+    this.ui.title.textContent = txt.title || this.sc.title;
+    this.ui.blurb.textContent = txt.blurb || this.sc.blurb;
+    this.ui.steps.innerHTML = this.steps.map((st, i) => `
+      <li data-t="${st.t.toFixed(2)}" tabindex="0">
         <span class="step-n">${i + 1}</span>
-        <span><strong>${s.title}</strong><span class="step-text">${s.text}</span></span>
+        <span><strong>${escH(st.title)}</strong><span class="step-text">${escH(st.text)}</span></span>
       </li>`).join('');
     this.ui.steps.querySelectorAll('li').forEach((li) => li.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); li.click(); }
     }));
     this.lastStep = -1;
-    this.resetCamera();
-    this.seek(0);
-    this.setPlaying(!matchMedia('(prefers-reduced-motion: reduce)').matches && this.visibleOnScreen);
+  }
+
+  refreshText() {
+    this.renderText();
+    this.seek(this.time);
+    this.ui.play.textContent = this.playing ? tr('pause') : tr('play');
   }
 
   seek(t) {
@@ -229,7 +250,7 @@ export class Lab {
         box.scrollTo({ top, behavior: 'smooth' });
       }
       const s = this.steps[idx];
-      this.ui.caption.innerHTML = `<strong>${s.title}.</strong> ${s.text}`;
+      this.ui.caption.innerHTML = `<strong>${escH(s.title)}.</strong> ${escH(s.text)}`;
     }
   }
 

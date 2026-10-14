@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Driving Teaching · A to Z guide for driving instructors</title>
-  <meta name="description" content="A to Z guide for UK driving instructors: teaching methods, every lesson topic, 3D junction and roundabout scenarios, a lesson planner and a Part 3 self-assessment.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Driving Teaching · Learn to drive safely, A to Z</title>
+  <meta name="description" content="Learn to drive safely: simple steps, clear pictures and 3D practice in English, Bengali, Urdu, Hindi, Polish, Romanian and Arabic. Instructor tools for UK ADIs.">
   <meta name="theme-color" content="#1c1f23">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
-      }
-    }
-  </script>
 </head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
+<body class="mode-learner">
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="brand" href="#top" aria-label="Driving Teaching home">
+      <a class="brand" href="#top" aria-label="Driving Teaching">
         <span class="lplate" aria-hidden="true">L</span>
-        <span>Driving Teaching</span>
+        <span class="brand-name">Driving Teaching</span>
       </a>
-      <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+      <div class="top-actions">
+        <label class="lang-pick">
+          <span class="sr-only" data-i18n="language">Language</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3a15.7 15.7 0 0 0-1.3-3.9A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.4a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h3a15.7 15.7 0 0 0 1.3 3.9A8 8 0 0 1 5.1 16Zm3-8h-3a8 8 0 0 1 4.3-3.9C8.9 5.3 8.4 6.6 8.1 8ZM12 19.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.9c.6-1.2 1-2.5 1.3-3.9h3a8 8 0 0 1-4.3 3.9Zm1.7-5.9a16.5 16.5 0 0 0 0-4h3.4a8 8 0 0 1 0 4h-3.4Z"/></svg>
+          <select data-lang-select></select>
+        </label>
+        <button class="menu-btn" aria-expanded="false" aria-controls="nav" data-i18n="menu">Menu</button>
+      </div>
       <nav id="nav" class="nav" aria-label="Main">
-        <a href="#toolkit">Toolkit</a>
-        <a href="#topics">A–Z topics</a>
-        <a href="#lab">3D lab</a>
-        <a href="#planner">Lesson planner</a>
-        <a href="#part3">Part 3 check</a>
+        <a href="#topics" data-i18n="navLearn">Lessons</a>
+        <a href="#lab" data-i18n="navLab">3D practice</a>
+        <a href="#stopping" data-i18n="navStop">Stopping</a>
+        <a href="#toolkit" class="instructor-only" data-i18n="navToolkit">Toolkit</a>
+        <a href="#planner" class="instructor-only" data-i18n="navPlanner">Lesson planner</a>
+        <a href="#part3" class="instructor-only" data-i18n="navPart3">Part 3 check</a>
       </nav>
     </div>
   </header>
@@ -45,70 +45,66 @@
       <canvas class="hero-canvas" aria-hidden="true"></canvas>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="wrap hero-content">
-        <p class="eyebrow">For ADIs and trainee instructors</p>
-        <h1>Teach every learner, from first lesson to test day.</h1>
-        <p class="lede">An A to Z of what to teach and how to teach it: client-centred methods, every core topic with common faults and fixes, and 3D scenarios you can pause, scrub and talk through with a pupil.</p>
+        <p class="eyebrow" data-hero="eyebrow"></p>
+        <h1 data-hero="title"></h1>
+        <p class="lede" data-hero="lede"></p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#lab">Open the 3D lab</a>
-          <a class="btn btn-ghost" href="#topics">Browse topics</a>
+          <a class="btn btn-primary" href="#topics" data-i18n="ctaTopics">Start the lessons</a>
+          <a class="btn btn-ghost" href="#lab" data-i18n="ctaLab">Try the 3D practice</a>
+        </div>
+        <div class="mode-switch" role="group" data-i18n-attr="aria-label:modeLabel">
+          <span class="mode-label" data-i18n="modeLabel">Show the site for</span>
+          <button data-mode="learner" aria-pressed="true" data-i18n="modeLearner">Learner</button>
+          <button data-mode="instructor" aria-pressed="false" data-i18n="modeInstructor">Instructor</button>
         </div>
         <dl class="stats">
-          <div><dt>Lesson topics</dt><dd data-count="topics">18</dd></div>
-          <div><dt>3D scenarios</dt><dd>3</dd></div>
-          <div><dt>Part 3 competencies</dt><dd>17</dd></div>
+          <div><dt data-i18n="statTopics">Lessons</dt><dd data-count="topics">18</dd></div>
+          <div><dt data-i18n="statScenarios">3D scenarios</dt><dd>3</dd></div>
+          <div><dt data-i18n="statLanguages">Languages</dt><dd data-count="langs">7</dd></div>
         </dl>
       </div>
     </section>
 
-    <section class="section" id="toolkit">
+    <section class="section" id="topics">
       <div class="wrap">
         <header class="section-head">
-          <p class="kicker">01 · Teaching toolkit</p>
-          <h2>How to teach, before what to teach</h2>
-          <p>The same six habits run through every good lesson. Use them on a quiet estate road or a busy roundabout.</p>
+          <p class="kicker" data-i18n="learnKicker">Lessons A to Z</p>
+          <h2 data-i18n="learnTitle">One lesson at a time</h2>
+          <p data-i18n="learnIntro"></p>
         </header>
-        <div class="method-grid" data-render="methods"></div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="topics">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker">02 · A to Z topics</p>
-          <h2>Every lesson, with faults and fixes</h2>
-          <p>Pick a topic for key teaching points, common faults with likely causes and remedies, and open questions to ask your pupil.</p>
-        </header>
+        <div class="progress-bar" aria-live="polite"><span class="progress-fill" data-progress-fill></span><span class="progress-text" data-progress-text></span></div>
         <div class="topic-tools">
-          <div class="chips" role="group" aria-label="Filter by stage" data-render="stage-chips"></div>
+          <div class="chips" role="group" data-render="stage-chips"></div>
           <label class="search">
-            <span class="sr-only">Search topics</span>
-            <input type="search" placeholder="Search topics, e.g. roundabout" data-topic-search>
+            <span class="sr-only" data-i18n="search">Search lessons</span>
+            <input type="search" data-topic-search data-i18n-attr="placeholder:searchPlaceholder">
           </label>
         </div>
         <ol class="topic-grid" data-render="topics"></ol>
-        <p class="empty" data-topic-empty hidden>No topics match that search.</p>
+        <p class="empty" data-topic-empty hidden data-i18n="noResults"></p>
       </div>
     </section>
 
     <section class="section lab" id="lab">
       <div class="wrap">
         <header class="section-head">
-          <p class="kicker">03 · 3D scenario lab</p>
-          <h2>Pause the road and talk it through</h2>
-          <p>Use these on a tablet during a briefing. Pause on any step, scrub back, or switch to the driver's view to show what the pupil will actually see.</p>
+          <p class="kicker" data-i18n="labKicker">3D practice</p>
+          <h2 data-i18n="labTitle">Watch, pause and talk it through</h2>
+          <p data-i18n="labIntro"></p>
         </header>
         <div class="lab-shell" data-lab-root>
-          <div class="lab-tabs" role="tablist" aria-label="Scenarios">
-            <button role="tab" data-scenario="tjunction">T-junction</button>
-            <button role="tab" data-scenario="roundabout">Roundabout</button>
-            <button role="tab" data-scenario="meeting">Meeting traffic</button>
+          <div class="lab-tabs" role="tablist">
+            <button role="tab" data-scenario="tjunction" aria-selected="true" data-i18n="labT">T-junction</button>
+            <button role="tab" data-scenario="roundabout" aria-selected="false" data-i18n="labR">Roundabout</button>
+            <button role="tab" data-scenario="meeting" aria-selected="false" data-i18n="labM">Meeting traffic</button>
           </div>
           <div class="lab-main">
             <div class="lab-stage">
-              <canvas class="lab-canvas" aria-label="3D view of the driving scenario"></canvas>
-              <div class="lab-views" role="group" aria-label="Camera">
-                <button data-view="overview" aria-pressed="true">Overview</button>
-                <button data-view="driver" aria-pressed="false">Driver's view</button>
+              <canvas class="lab-canvas"></canvas>
+              <div class="lab-status" data-lab-status data-i18n="loading3d">Loading 3D…</div>
+              <div class="lab-views" role="group">
+                <button data-view="overview" aria-pressed="true" data-i18n="overview">Overview</button>
+                <button data-view="driver" aria-pressed="false" data-i18n="driverView">Driver's view</button>
               </div>
               <p class="lab-caption" data-lab="caption" aria-live="polite"></p>
             </div>
@@ -119,13 +115,13 @@
             </aside>
           </div>
           <div class="lab-controls">
-            <button class="btn btn-small btn-primary" data-lab="play" aria-pressed="false">Play</button>
-            <button class="btn btn-small" data-lab="restart">Restart</button>
-            <input type="range" min="0" max="18" step="0.01" value="0" data-lab="scrub" aria-label="Scenario timeline">
+            <button class="btn btn-small btn-primary" data-lab="play" aria-pressed="false" data-i18n="play">Play</button>
+            <button class="btn btn-small" data-lab="restart" data-i18n="restart">Restart</button>
+            <input type="range" min="0" max="18" step="0.01" value="0" data-lab="scrub" data-i18n-attr="aria-label:timeline">
             <span class="lab-time" data-lab="time">0.0s</span>
-            <button class="btn btn-small" data-lab="speed" aria-label="Playback speed normal">1×</button>
+            <button class="btn btn-small" data-lab="speed">1×</button>
           </div>
-          <p class="lab-note" data-lab-fallback hidden>The 3D lab needs WebGL, which this browser has turned off. Try an up-to-date Chrome, Safari or Firefox.</p>
+          <p class="lab-note" data-lab-fallback hidden data-i18n="no3d"></p>
         </div>
       </div>
     </section>
@@ -133,23 +129,34 @@
     <section class="section section-alt" id="stopping">
       <div class="wrap">
         <header class="section-head">
-          <p class="kicker">04 · Briefing aid</p>
-          <h2>Stopping distances</h2>
-          <p>Typical figures from the Highway Code for a dry road. Double them in the wet and allow up to ten times on ice.</p>
+          <p class="kicker" data-i18n="stopKicker">Stopping distances</p>
+          <h2 data-i18n="stopTitle">How far it takes to stop</h2>
+          <p data-i18n="stopIntro"></p>
         </header>
-        <div class="stop-toggle chips" role="group" aria-label="Road surface">
-          <button class="chip" aria-pressed="true" data-surface="dry">Dry</button>
-          <button class="chip" aria-pressed="false" data-surface="wet">Wet (×2)</button>
+        <div class="stop-toggle chips" role="group">
+          <button class="chip" aria-pressed="true" data-surface="dry" data-i18n="dry">Dry road</button>
+          <button class="chip" aria-pressed="false" data-surface="wet" data-i18n="wet">Wet road (×2)</button>
         </div>
         <div class="stop-chart" data-render="stopping"></div>
-        <p class="legend"><span class="sw sw-think"></span> Thinking distance <span class="sw sw-brake"></span> Braking distance</p>
+        <p class="legend"><span class="sw sw-think"></span> <span data-i18n="thinking">Thinking distance</span> <span class="sw sw-brake"></span> <span data-i18n="braking">Braking distance</span></p>
       </div>
     </section>
 
-    <section class="section" id="planner">
+    <section class="section instructor-only" id="toolkit" lang="en" dir="ltr">
       <div class="wrap">
         <header class="section-head">
-          <p class="kicker">05 · Lesson planner</p>
+          <p class="kicker">Instructor · Teaching toolkit</p>
+          <h2>How to teach, before what to teach</h2>
+          <p>The same six habits run through every good lesson. Use them on a quiet estate road or a busy roundabout.</p>
+        </header>
+        <div class="method-grid" data-render="methods"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt instructor-only" id="planner" lang="en" dir="ltr">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">Instructor · Lesson planner</p>
           <h2>Build a client-centred lesson plan</h2>
           <p>Fill in the basics and get a structured plan with timings, a risk talk, key points and questions. Copy it or print it.</p>
         </header>
@@ -186,10 +193,10 @@
       </div>
     </section>
 
-    <section class="section section-alt" id="part3">
+    <section class="section instructor-only" id="part3" lang="en" dir="ltr">
       <div class="wrap">
         <header class="section-head">
-          <p class="kicker">06 · Part 3 and standards check</p>
+          <p class="kicker">Instructor · Part 3 and standards check</p>
           <h2>Score a lesson like the examiner</h2>
           <p>Rate each of the 17 competencies from 0 to 3 after a practice lesson. Scores save in this browser only.</p>
         </header>
@@ -204,8 +211,8 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <p><span class="lplate small" aria-hidden="true">L</span> Driving Teaching. Built by Mohammed Ali.</p>
-      <p class="fine">A teaching aid, not official guidance. Not affiliated with DVSA. Check the Highway Code and DVSA publications for the current rules.</p>
+      <p><span class="lplate small" aria-hidden="true">L</span> Driving Teaching. <span data-i18n="builtBy">Built by Mohammed Ali.</span></p>
+      <p class="fine" data-i18n="footerNote"></p>
     </div>
   </footer>
 
