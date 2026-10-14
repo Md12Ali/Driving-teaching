@@ -3,6 +3,15 @@
 export default {
   dir: 'ltr',
   ui: {
+    navTools: 'In-car tools',
+    toolsKicker: 'In-car tools',
+    toolsTitle: 'Use it in the car',
+    toolsIntro: 'Two touch-friendly tools for a tablet or phone on the dashboard. Built for instructors to explain things to a student in real time.',
+    dashName: '3D teaching dashboard',
+    dashDesc: 'Five road scenes (T-junction, two-lane roundabout, parallel park, reverse bay, crossroads with traffic lights). Drive the car, show mirror views, blind spots, reference lines and the ideal path.',
+    cockpitName: 'Cockpit & blind spot simulator',
+    cockpitDesc: "Sit in the driver's seat. Step through the 6-point check with working mirrors, and hide hazards to test what the student notices.",
+    openTool: 'Open',
     skip: 'Skip to content',
     navLearn: 'Lessons',
     navLab: '3D practice',

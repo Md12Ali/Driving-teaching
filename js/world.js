@@ -174,9 +174,10 @@ export function car(color, { learner = false } = {}) {
     const sign = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.22, 0.3), mat(0xf2c230));
     sign.position.set(0, 1.62, -0.25);
     g.add(sign);
+    g.userData.sign = sign;
   }
 
-  g.userData = { indicators, brakeMat, wheels, body, cabin, roof };
+  Object.assign(g.userData, { indicators, brakeMat, wheels, body, cabin, roof });
   return g;
 }
 

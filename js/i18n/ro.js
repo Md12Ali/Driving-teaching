@@ -2,6 +2,15 @@
 export default {
   dir: 'ltr',
   ui: {
+    navTools: 'Instrumente în mașină',
+    toolsKicker: 'Instrumente în mașină',
+    toolsTitle: 'Folosește-le în mașină',
+    toolsIntro: 'Două instrumente tactile pentru o tabletă sau un telefon pe bord. Instructorul poate explica totul cursantului pe loc.',
+    dashName: 'Panou de predare 3D',
+    dashDesc: 'Cinci scene (intersecție în T, sens giratoriu cu două benzi, parcare laterală, parcare cu spatele, intersecție cu semafoare). Condu mașina, arată ce se vede în oglinzi, unghiurile moarte, liniile de reper și traseul corect.',
+    cockpitName: 'Simulator de cabină și unghiuri moarte',
+    cockpitDesc: 'Stai pe scaunul șoferului. Parcurge verificarea în 6 puncte cu oglinzi funcționale și ascunde pericole ca să vezi ce observă cursantul.',
+    openTool: 'Deschide',
     skip: 'Sari la conținut',
     navLearn: 'Lecții',
     navLab: 'Exersare 3D',

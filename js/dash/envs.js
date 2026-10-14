@@ -9,18 +9,13 @@ const white = () => new THREE.MeshStandardMaterial({ color: PALETTE.marking, rou
 // Thin painted line between two ground points.
 function line(g, x1, z1, x2, z2, w = 0.12, y = 0.036) {
   const len = Math.hypot(x2 - x1, z2 - z1);
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, len), white());
-  m.rotation.x = -Math.PI / 2;
-  m.rotation.z = Math.atan2(x2 - x1, z2 - z1) * -1;
+  const geo = new THREE.PlaneGeometry(w, len);
+  geo.rotateX(-Math.PI / 2); // lies flat, length along z
+  const m = new THREE.Mesh(geo, white());
   m.position.set((x1 + x2) / 2, y, (z1 + z2) / 2);
-  m.rotation.order = 'YXZ';
-  m.rotation.set(-Math.PI / 2, 0, 0);
-  const holder = new THREE.Group();
-  holder.position.copy(m.position);
-  m.position.set(0, 0, 0);
-  holder.rotation.y = Math.atan2(x2 - x1, z2 - z1);
-  holder.add(m);
-  g.add(holder);
+  m.rotation.y = Math.atan2(x2 - x1, z2 - z1);
+  m.receiveShadow = true;
+  g.add(m);
 }
 
 function dashed(g, x1, z1, x2, z2, dash = 2, gap = 2.5, w = 0.12) {

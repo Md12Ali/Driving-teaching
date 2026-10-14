@@ -2,6 +2,15 @@
 export default {
   dir: 'ltr',
   ui: {
+    navTools: 'Narzędzia w aucie',
+    toolsKicker: 'Narzędzia w aucie',
+    toolsTitle: 'Używaj w samochodzie',
+    toolsIntro: 'Dwa dotykowe narzędzia na tablet lub telefon na desce rozdzielczej. Instruktor może od razu wszystko wytłumaczyć kursantowi.',
+    dashName: 'Panel nauki 3D',
+    dashDesc: 'Pięć scen (skrzyżowanie T, rondo dwupasmowe, parkowanie równoległe, parkowanie tyłem, skrzyżowanie ze światłami). Jedź autem, pokaż widok w lusterkach, martwe pola, linie odniesienia i właściwy tor jazdy.',
+    cockpitName: 'Symulator kokpitu i martwych pól',
+    cockpitDesc: 'Usiądź na miejscu kierowcy. Przejdź 6-punktową kontrolę z działającymi lusterkami i ukryj zagrożenia, by sprawdzić, co zauważy kursant.',
+    openTool: 'Otwórz',
     skip: 'Przejdź do treści',
     navLearn: 'Lekcje',
     navLab: 'Ćwiczenia 3D',
