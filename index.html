@@ -34,6 +34,7 @@
         <a href="#topics" data-i18n="navLearn">Lessons</a>
         <a href="#lab" data-i18n="navLab">3D practice</a>
         <a href="#tools" data-i18n="navTools">In-car tools</a>
+        <a href="#part3-video">Part 3 video</a>
         <a href="#stopping" data-i18n="navStop">Stopping</a>
         <a href="#toolkit" class="instructor-only" data-i18n="navToolkit">Toolkit</a>
         <a href="#planner" class="instructor-only" data-i18n="navPlanner">Lesson planner</a>
@@ -148,6 +149,57 @@
         </div>
       </div>
     </section>
+    <section class="section" id="part3-video" lang="en" dir="ltr">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">ADI Part 3 · model lesson</p>
+          <h2>Meeting oncoming traffic on narrow roads</h2>
+          <p>A full 3D model lesson, from meeting the examiner to the result: goal setting, risk agreement, a blind-bend intervention, prompts, independent driving and reflection. It runs about 16 minutes. Every rule in it was checked against GOV.UK, the DVSA test report form and the Highway Code in October 2026.</p>
+        </header>
+        <div class="p3v">
+          <div class="p3v-player">
+            <video controls preload="metadata" playsinline poster="media/adi-part3-poster.jpg" data-p3v>
+              <source src="media/adi-part3-model-lesson.mp4" type="video/mp4">
+            </video>
+            <div class="p3v-audio">
+              <p><strong>Revision audio (MP3).</strong> The same lesson, plus study chapters: route choice, handling errors, technical knowledge, the 17 competencies and a self-test with pauses.</p>
+              <audio controls preload="none" src="media/adi-part3-revision-audio.mp3"></audio>
+              <a class="btn btn-small" href="media/adi-part3-revision-audio.mp3" download>Download MP3</a>
+            </div>
+          </div>
+          <nav class="p3v-chapters" aria-label="Video chapters">
+            <p class="p3v-title">Chapters</p>
+            <ol>
+            <li><button type="button" data-seek="14"><span>0:14</span> Arriving at the test centre</button></li>
+            <li><button type="button" data-seek="68"><span>1:08</span> Today&#x27;s route (TomTom)</button></li>
+            <li><button type="button" data-seek="104"><span>1:44</span> Goal and risk (max 3 minutes)</button></li>
+            <li><button type="button" data-seek="301"><span>5:01</span> Kildowan Road</button></li>
+            <li><button type="button" data-seek="315"><span>5:15</span> Granton Road</button></li>
+            <li><button type="button" data-seek="359"><span>5:59</span> Green Lane</button></li>
+            <li><button type="button" data-seek="399"><span>6:39</span> Goodmayes Lane</button></li>
+            <li><button type="button" data-seek="413"><span>6:53</span> Trenance Gardens · the bend (FCPS)</button></li>
+            <li><button type="button" data-seek="479"><span>7:59</span> Westrow Gardens · back to the bend</button></li>
+            <li><button type="button" data-seek="504"><span>8:24</span> Levett Gardens</button></li>
+            <li><button type="button" data-seek="516"><span>8:36</span> Gyllyngdune Gardens</button></li>
+            <li><button type="button" data-seek="570"><span>9:30</span> Breamore Road and Oakwood Gardens</button></li>
+            <li><button type="button" data-seek="608"><span>10:08</span> Green Lane and New Road</button></li>
+            <li><button type="button" data-seek="633"><span>10:33</span> High Road</button></li>
+            <li><button type="button" data-seek="657"><span>10:57</span> Cameron Road roundabout</button></li>
+            <li><button type="button" data-seek="687"><span>11:27</span> Wards Road, Mafeking and Ladysmith Avenue</button></li>
+            <li><button type="button" data-seek="714"><span>11:54</span> Jamil on his own · Aldborough Road South</button></li>
+            <li><button type="button" data-seek="736"><span>12:16</span> High Road and Electric Parade</button></li>
+            <li><button type="button" data-seek="753"><span>12:33</span> Felbrigge Road</button></li>
+            <li><button type="button" data-seek="766"><span>12:46</span> Granton Road and back to Kildowan Road</button></li>
+            <li><button type="button" data-seek="778"><span>12:58</span> Pupil reflects (max 3 minutes)</button></li>
+            <li><button type="button" data-seek="848"><span>14:08</span> The examiner&#x27;s result</button></li>
+            <li><button type="button" data-seek="874"><span>14:34</span> Quick revision</button></li>
+            <li><button type="button" data-seek="913"><span>15:13</span> The 17 competencies</button></li>
+            </ol>
+          </nav>
+        </div>
+        <p class="fine">A proposed practice route around Goodmayes, Ilford, not an official test route. A teaching aid, not official guidance, and no lesson can guarantee a grade.</p>
+      </div>
+    </section>
     <section class="section section-alt" id="stopping">
       <div class="wrap">
         <header class="section-head">
@@ -242,6 +294,21 @@
     <div class="dlg-inner" data-topic-body></div>
   </dialog>
 
+  <script>
+    (function () {
+      var v = document.querySelector('[data-p3v]');
+      if (!v) return;
+      var btns = Array.prototype.slice.call(document.querySelectorAll('.p3v-chapters [data-seek]'));
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () { v.currentTime = +b.dataset.seek; v.play(); });
+      });
+      v.addEventListener('timeupdate', function () {
+        var cur = null;
+        btns.forEach(function (b) { if (v.currentTime >= +b.dataset.seek) cur = b; });
+        btns.forEach(function (b) { b.setAttribute('aria-current', b === cur ? 'true' : 'false'); });
+      });
+    })();
+  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
