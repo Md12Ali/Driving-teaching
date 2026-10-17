@@ -6,7 +6,14 @@ A web app for UK driving instructors and their students, from first lesson to pa
 
 ## What it does
 
-- **Dashboard**: overall test-readiness percentage, progress for each of the 4 phases, the next lesson to work on, the latest mock test and Show me / Tell me score.
+- **Teaching route**: 37 sessions in 8 stages, in the order to teach them, from first drive to test standard. The stages are first drives, junctions, other traffic (meeting traffic before roundabouts), roundabouts and lights, planning and hazards, manoeuvres, faster roads, and test standard. Each session has:
+  - where to teach and the typical hours
+  - what the pupil will be able to do, and the teaching points
+  - a client-centred lesson plan
+  - common pupil problems with quick fixes
+  - a "ready to move on when…" checklist
+  - links to the lessons to study first, and a printable lesson plan
+- **Dashboard**: the current teaching-route session, test-readiness percentage, progress for each of the 4 phases, the latest mock test and the Show me / Tell me score.
 - **A to Z curriculum**: 30 lessons in 4 phases:
   1. Fundamentals
   2. Junctions & Traffic
@@ -36,10 +43,12 @@ scripts/
   build-css.mjs            Compiles app.css with Tailwind v4 (scans index.html and src/)
 src/
   app.js                   Hash router, navigation, theme and profile switch
+  illustrations.js         Original illustrated banners (hero + one per route stage), light and dark
   store.js                 Student profiles, progress, mock tests, export/import, readiness maths
   ui.js                    Icons, badges, progress bars and ring, buttons, helpers
   data/
     curriculum.js          Phases and the 30 lessons (objective, steps, example, faults, checklist)
+    route.js               Teaching route: 8 stages, 37 sessions, the standard lesson-plan shape
     manoeuvres.js          Manoeuvre steps: car positions, steering, reference points, observations
     showme.js              Show me / Tell me questions and answers
     testreport.js          Driving test report categories for the mock test sheet
@@ -47,7 +56,7 @@ src/
     kit.js                 SVG drawing kit: cars, roads, labels, arrows (UK left-hand traffic)
     index.js               One teaching picture per lesson
   pages/
-    dashboard.js  curriculum.js  lesson.js  manoeuvres.js
+    dashboard.js  route.js (route, session, More)  curriculum.js  lesson.js  manoeuvres.js
     showme.js     mocktest.js    students.js  resources.js
 render.yaml                Render static site settings
 package.json
@@ -75,6 +84,11 @@ npm run build:css
 - Lessons: `src/data/curriculum.js`. Checklist ratings are stored per lesson id and item position, so add new checklist items at the end of a list.
 - Pictures: `src/diagrams/index.js` (640×360 canvas; on a north–south road, northbound traffic uses the left half).
 - Manoeuvre steps and reference points: `src/data/manoeuvres.js`.
+- Teaching route order and session content: `src/data/route.js`. Session ids (`s01`…) store progress, so keep them when reordering.
+
+## Images
+
+Every picture and banner is an original illustration drawn in code (SVG), so there are no licensing or attribution issues and they stay sharp on any screen.
 
 ## Deploy
 

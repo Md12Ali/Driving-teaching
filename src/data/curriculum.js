@@ -241,6 +241,67 @@ export const LESSONS = [
     tip: 'Unmarked means nobody has priority, including you.',
   }),
   L({
+    id: 'meeting', phase: 2, title: 'Meeting traffic & clearance', short: 'Narrow roads, parked cars', time: '45 min',
+    objective: 'Plan ahead on narrow roads with parked cars and decide early who should give way.',
+    steps: [
+      ['Look well ahead', 'Spot oncoming vehicles and gaps early, before you commit.'],
+      ['Whose side?', 'If the parked cars are on your side, be ready to give way. It is not a right of way, so stay flexible.'],
+      ['Hold back', 'Wait in a gap, well back from the parked car, with a clear view and room to drive out.'],
+      ['Clearance', 'Leave about a door\'s width (around 1 metre). If you cannot, slow right down.'],
+      ['Communicate', 'Acknowledge drivers who wait for you. Watch for doors opening and people between cars.'],
+    ],
+    example: { title: 'Example', text: 'On a terraced street, Omar sees a bus coming. The parked cars are on his side, so he pulls into a gap early and waits well back so the bus has room to pass.' },
+    diagram: 'meeting', caption: 'Parked cars on your side: wait in a gap and let the other car through.',
+    faults: [
+      ['Committing too early and meeting a vehicle head-on', 'Judgement – Meeting traffic', 'Ask "what is at the end of the parked cars?" before you go.'],
+      ['Passing parked cars too closely', 'Clearance to obstructions', 'One metre, or slow right down.'],
+      ['Stopping too close to the parked car to drive out', 'Awareness & planning', 'Hold back so you can see and steer out.'],
+    ],
+    checklist: ['Plans ahead for oncoming traffic', 'Decides correctly who should give way', 'Holds back in a safe position', 'Keeps safe clearance from parked cars'],
+    tip: 'The earlier you decide, the easier it is.',
+  }),
+  L({
+    id: 'following', phase: 2, title: 'Following distance & stopping', short: 'Two-second rule', time: '30 min',
+    objective: 'Keep a safe gap and understand how far it really takes to stop.',
+    steps: [
+      ['Two-second rule', 'As the car ahead passes a fixed point, say "Only a fool breaks the two-second rule". If you pass it before you finish, drop back.'],
+      ['Wet roads', 'At least double the gap: four seconds or more.'],
+      ['Ice', 'Stopping distances can be ten times longer.'],
+      ['Queues', 'When you stop behind another vehicle, see its tyres touching the road.'],
+      ['Stopping distances', 'Highway Code typical figures: 20 mph 12 m, 30 mph 23 m, 40 mph 36 m, 50 mph 53 m, 60 mph 73 m, 70 mph 96 m.'],
+    ],
+    example: { title: 'Example', text: 'On a wet A-road, Nina counts only two seconds behind a lorry. She eases off until she can count four, which also gives her a better view past it.' },
+    diagram: 'following', caption: 'Thinking plus braking distance at each speed (dry road).',
+    faults: [
+      ['Following too closely', 'Following distance', 'Use the two-second rule, four in the wet.'],
+      ['Stopping too close to the vehicle in front', 'Following distance', '"Tyres and tarmac": see where its tyres meet the road.'],
+      ['Braking late and harshly', 'Control – Footbrake', 'A bigger gap gives you time to brake gently.'],
+    ],
+    checklist: ['Keeps a two-second gap in the dry', 'Doubles the gap in the wet', 'Stops a safe distance behind queues', 'Knows typical stopping distances'],
+    tip: 'Only a fool breaks the two-second rule.',
+  }),
+
+  L({
+    id: 'crossings', phase: 2, title: 'Pedestrian crossings', short: 'Zebra, pelican, puffin, toucan', time: '30 min',
+    objective: 'Recognise every type of crossing early and deal with people crossing safely.',
+    steps: [
+      ['Zebra', 'Flashing amber beacons and black-and-white stripes. Give way to anyone on the crossing, and be ready to stop for people waiting.'],
+      ['Pelican', 'Lights with a flashing amber stage: give way to anyone still crossing, then go if clear.'],
+      ['Puffin and toucan', 'No flashing amber. Sensors hold red until people are across. Toucans are shared with cyclists.'],
+      ['Zigzag lines', 'Never park or overtake on the zigzags.'],
+      ['Do not wave people across', 'You cannot see other traffic for them. Just stop and wait.'],
+    ],
+    example: { title: 'Example', text: 'Near a school, Hana sees an adult with two children standing at a zebra crossing. She checks her mirror, slows early and stops smoothly so they can cross.' },
+    diagram: 'crossings', caption: 'Zebra and light-controlled crossings, with zigzag lines.',
+    faults: [
+      ['Not stopping for someone on a zebra crossing', 'Pedestrian crossings', 'Scan the pavement near crossings and slow down early.'],
+      ['Beckoning pedestrians to cross', 'Pedestrian crossings', 'Keep your hands on the wheel and let them decide.'],
+      ['Overtaking on the approach to a crossing', 'Response to signs – Road markings', 'Zigzags mean no overtaking.'],
+    ],
+    checklist: ['Recognises each type of crossing early', 'Stops correctly for pedestrians', 'Handles flashing amber correctly', 'Does not beckon or overtake'],
+    tip: 'Look for the people near the crossing, not just the crossing.',
+  }),
+  L({
     id: 'roundabouts', phase: 2, title: 'Roundabouts', short: 'Lanes, signals, give way', time: '60 min',
     objective: 'Approach, negotiate and leave roundabouts in the right lane, with correct signals and good judgement.',
     steps: [
@@ -284,46 +345,6 @@ export const LESSONS = [
     tip: 'Green means go if the way is clear, not just go.',
   }),
   L({
-    id: 'crossings', phase: 2, title: 'Pedestrian crossings', short: 'Zebra, pelican, puffin, toucan', time: '30 min',
-    objective: 'Recognise every type of crossing early and deal with people crossing safely.',
-    steps: [
-      ['Zebra', 'Flashing amber beacons and black-and-white stripes. Give way to anyone on the crossing, and be ready to stop for people waiting.'],
-      ['Pelican', 'Lights with a flashing amber stage: give way to anyone still crossing, then go if clear.'],
-      ['Puffin and toucan', 'No flashing amber. Sensors hold red until people are across. Toucans are shared with cyclists.'],
-      ['Zigzag lines', 'Never park or overtake on the zigzags.'],
-      ['Do not wave people across', 'You cannot see other traffic for them. Just stop and wait.'],
-    ],
-    example: { title: 'Example', text: 'Near a school, Hana sees an adult with two children standing at a zebra crossing. She checks her mirror, slows early and stops smoothly so they can cross.' },
-    diagram: 'crossings', caption: 'Zebra and light-controlled crossings, with zigzag lines.',
-    faults: [
-      ['Not stopping for someone on a zebra crossing', 'Pedestrian crossings', 'Scan the pavement near crossings and slow down early.'],
-      ['Beckoning pedestrians to cross', 'Pedestrian crossings', 'Keep your hands on the wheel and let them decide.'],
-      ['Overtaking on the approach to a crossing', 'Response to signs – Road markings', 'Zigzags mean no overtaking.'],
-    ],
-    checklist: ['Recognises each type of crossing early', 'Stops correctly for pedestrians', 'Handles flashing amber correctly', 'Does not beckon or overtake'],
-    tip: 'Look for the people near the crossing, not just the crossing.',
-  }),
-  L({
-    id: 'meeting', phase: 2, title: 'Meeting traffic & clearance', short: 'Narrow roads, parked cars', time: '45 min',
-    objective: 'Plan ahead on narrow roads with parked cars and decide early who should give way.',
-    steps: [
-      ['Look well ahead', 'Spot oncoming vehicles and gaps early, before you commit.'],
-      ['Whose side?', 'If the parked cars are on your side, be ready to give way. It is not a right of way, so stay flexible.'],
-      ['Hold back', 'Wait in a gap, well back from the parked car, with a clear view and room to drive out.'],
-      ['Clearance', 'Leave about a door\'s width (around 1 metre). If you cannot, slow right down.'],
-      ['Communicate', 'Acknowledge drivers who wait for you. Watch for doors opening and people between cars.'],
-    ],
-    example: { title: 'Example', text: 'On a terraced street, Omar sees a bus coming. The parked cars are on his side, so he pulls into a gap early and waits well back so the bus has room to pass.' },
-    diagram: 'meeting', caption: 'Parked cars on your side: wait in a gap and let the other car through.',
-    faults: [
-      ['Committing too early and meeting a vehicle head-on', 'Judgement – Meeting traffic', 'Ask "what is at the end of the parked cars?" before you go.'],
-      ['Passing parked cars too closely', 'Clearance to obstructions', 'One metre, or slow right down.'],
-      ['Stopping too close to the parked car to drive out', 'Awareness & planning', 'Hold back so you can see and steer out.'],
-    ],
-    checklist: ['Plans ahead for oncoming traffic', 'Decides correctly who should give way', 'Holds back in a safe position', 'Keeps safe clearance from parked cars'],
-    tip: 'The earlier you decide, the easier it is.',
-  }),
-  L({
     id: 'hazards', phase: 2, title: 'Hazards & vulnerable road users', short: 'Scan, predict, plan', time: '60 min',
     objective: 'Spot hazards early, predict what might happen, and give vulnerable road users the space they need.',
     steps: [
@@ -344,27 +365,6 @@ export const LESSONS = [
     checklist: ['Scans near, middle and far', 'Anticipates what others will do', 'Gives vulnerable road users enough space', 'Responds early to developing hazards'],
     tip: 'Every hazard you spot early is one you will not need to brake hard for.',
   }),
-  L({
-    id: 'following', phase: 2, title: 'Following distance & stopping', short: 'Two-second rule', time: '30 min',
-    objective: 'Keep a safe gap and understand how far it really takes to stop.',
-    steps: [
-      ['Two-second rule', 'As the car ahead passes a fixed point, say "Only a fool breaks the two-second rule". If you pass it before you finish, drop back.'],
-      ['Wet roads', 'At least double the gap: four seconds or more.'],
-      ['Ice', 'Stopping distances can be ten times longer.'],
-      ['Queues', 'When you stop behind another vehicle, see its tyres touching the road.'],
-      ['Stopping distances', 'Highway Code typical figures: 20 mph 12 m, 30 mph 23 m, 40 mph 36 m, 50 mph 53 m, 60 mph 73 m, 70 mph 96 m.'],
-    ],
-    example: { title: 'Example', text: 'On a wet A-road, Nina counts only two seconds behind a lorry. She eases off until she can count four, which also gives her a better view past it.' },
-    diagram: 'following', caption: 'Thinking plus braking distance at each speed (dry road).',
-    faults: [
-      ['Following too closely', 'Following distance', 'Use the two-second rule, four in the wet.'],
-      ['Stopping too close to the vehicle in front', 'Following distance', '"Tyres and tarmac": see where its tyres meet the road.'],
-      ['Braking late and harshly', 'Control – Footbrake', 'A bigger gap gives you time to brake gently.'],
-    ],
-    checklist: ['Keeps a two-second gap in the dry', 'Doubles the gap in the wet', 'Stops a safe distance behind queues', 'Knows typical stopping distances'],
-    tip: 'Only a fool breaks the two-second rule.',
-  }),
-
   /* ---------------- Phase 3: Manoeuvres & High Speed ---------------- */
   L({
     id: 'parallel-park', phase: 3, title: 'Parallel park', short: 'Reverse park behind a car', time: '45 min',

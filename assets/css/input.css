@@ -110,3 +110,17 @@
 .dg .lamp-off { fill: #374151; }
 .dg .box { fill: #111827; stroke: #64748b; stroke-width: 2; }
 .dg .yellow-box { stroke: #facc15; stroke-width: 3; fill: none; }
+
+/* Illustrations */
+.il { --il-sky1: #bfdbfe; --il-sky2: #eff6ff; --il-sun: #fbbf24; --il-cloud: #ffffff; --il-road1: #3f444b; --il-road2: #5b6068; }
+.dark .il { --il-sky1: #0b1530; --il-sky2: #1e3a5f; --il-sun: #fde68a; --il-cloud: #334155; --il-road1: #23272d; --il-road2: #363b42; }
+.il .il-hill1 { fill: #86c06c; } .il .il-hill2 { fill: #b5d99c; } .il .il-grass { fill: #9fcd7f; }
+.dark .il .il-hill1 { fill: #2f5233; } .dark .il .il-hill2 { fill: #24402a; } .dark .il .il-grass { fill: #2d4a31; }
+.il .il-trunk { fill: #7c4a2d; } .il .il-leaf1 { fill: #3f8f4a; } .il .il-leaf2 { fill: #5aa35f; }
+.dark .il .il-leaf1 { fill: #25633a; } .dark .il .il-leaf2 { fill: #2f7444; }
+.il .il-window { fill: #bae6fd; } .dark .il .il-window { fill: #fde68a; }
+.il .il-glass { fill: #1e3a5f; } .dark .il .il-glass { fill: #0f172a; }
+.il .il-roadflat, .il .il-tarmac { fill: #4b5058; } .dark .il .il-roadflat, .dark .il .il-tarmac { fill: #2b2f36; }
+.il .il-kerb { fill: #d6d3d1; } .dark .il .il-kerb { fill: #57534e; }
+.il .il-island { fill: #6fb35a; } .dark .il .il-island { fill: #2f5233; }
+.il .il-road-s { stroke: #4b5058; } .dark .il .il-road-s { stroke: #2b2f36; }

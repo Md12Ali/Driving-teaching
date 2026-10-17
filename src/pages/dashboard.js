@@ -1,7 +1,9 @@
 import { PHASES, LESSONS, lessonsInPhase } from '../data/curriculum.js';
 import { TELL_ME, SHOW_ME } from '../data/showme.js';
 import { MANOEUVRES } from '../data/manoeuvres.js';
-import { store, readiness, phaseScore, lessonScore, nextLesson, mockResult } from '../store.js';
+import { store, readiness, phaseScore, lessonScore, nextLesson, mockResult, routeProgress } from '../store.js';
+import { SESSIONS, STAGES } from '../data/route.js';
+import { illustration } from '../illustrations.js';
 import { esc, icon, ring, bar, badge, card, btnPrimary, btnGhost, PHASE_STYLE, STATUS, fmtDate } from '../ui.js';
 
 export function render(root) {
@@ -13,13 +15,29 @@ export function render(root) {
   const lr = last ? mockResult(last) : null;
   const known = [...TELL_ME, ...SHOW_ME].filter((q) => st.showme[q.id] === 'known').length;
 
+  const rp = routeProgress(st);
+  const cur = rp.current;
+  const curStage = cur ? STAGES.find((x) => x.id === cur.stage) : null;
+
   root.innerHTML = `
+  <section class="${card} relative mb-6 overflow-hidden">
+    <div class="h-80 w-full sm:h-auto sm:aspect-[3/1]">${illustration('hero', { label: 'The road from first lesson to test pass', cls: 'h-full' })}</div>
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/60 to-slate-950/10 sm:bg-gradient-to-r sm:from-slate-950/80 sm:via-slate-950/30"></div>
+    <div class="absolute inset-x-0 bottom-0 p-5 sm:inset-y-0 sm:right-auto sm:flex sm:max-w-lg sm:flex-col sm:justify-center sm:p-8">
+      <p class="text-xs font-bold uppercase tracking-wider text-amber-300">Teaching route · ${rp.done}/${rp.total} sessions done</p>
+      ${cur ? `<h1 class="mt-1 text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl">Session ${SESSIONS.indexOf(cur) + 1}: ${esc(cur.title)}</h1>
+        <p class="mt-1 text-sm text-white/80">Stage ${curStage.id} · ${esc(curStage.title)} · ${esc(cur.where)}</p>
+        <div class="mt-4 flex flex-wrap gap-2"><a href="#/route/${cur.id}" class="${btnPrimary}">Open lesson plan ${icon('arrowR', 'size-4')}</a><a href="#/route" class="inline-flex items-center gap-2 rounded-xl bg-white/15 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/25">${icon('route', 'size-4')} Full route</a></div>`
+        : '<h1 class="mt-1 text-2xl font-extrabold text-white">Route complete. Ready for the test!</h1>'}
+    </div>
+  </section>
+
   <section class="${card} overflow-hidden">
     <div class="flex flex-col gap-6 p-5 sm:flex-row sm:items-center sm:p-7">
       ${ring(r.pct, 148)}
       <div class="min-w-0 flex-1">
         <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Progress for</p>
-        <h1 class="truncate text-2xl font-extrabold tracking-tight sm:text-3xl">${esc(st.name)}</h1>
+        <h2 class="truncate text-2xl font-extrabold tracking-tight sm:text-3xl">${esc(st.name)}</h2>
         <div class="mt-3 flex flex-wrap gap-2">
           <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="size-2 rounded-full bg-emerald-500"></span>${r.mastered} mastered</span>
           <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-900 dark:bg-amber-500/15 dark:text-amber-300"><span class="size-2 rounded-full bg-amber-500"></span>${r.practising} practising</span>

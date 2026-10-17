@@ -1,6 +1,7 @@
 // Progress store. Everything is saved in this browser (localStorage), per student profile.
 // Instructors can keep several students on one device and move data with Export / Import.
 import { LESSONS, itemId } from './data/curriculum.js';
+import { SESSIONS } from './data/route.js';
 
 const KEY = 'dt-data-v2';
 const listeners = new Set();
@@ -9,7 +10,7 @@ const newId = () => Math.random().toString(36).slice(2, 10);
 const now = () => new Date().toISOString();
 
 function blankStudent(name = 'My progress') {
-  return { id: newId(), name, created: now(), updated: now(), levels: {}, studied: {}, notes: {}, showme: {}, mocks: [] };
+  return { id: newId(), name, created: now(), updated: now(), levels: {}, studied: {}, notes: {}, showme: {}, mocks: [], route: {}, ready: {} };
 }
 
 function load() {
@@ -22,6 +23,8 @@ function load() {
 }
 
 let state = load();
+// Older profiles: add the route fields.
+for (const st of Object.values(state.students)) { st.route ||= {}; st.ready ||= {}; }
 
 function persist() {
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode: keep in memory */ }
@@ -44,7 +47,7 @@ export const store = {
     if (!state.students[state.activeId]) state.activeId = Object.keys(state.students)[0];
     persist();
   },
-  resetStudent(id) { const s = state.students[id]; Object.assign(s, { levels: {}, studied: {}, notes: {}, showme: {}, mocks: [] }); touch(s); persist(); },
+  resetStudent(id) { const s = state.students[id]; Object.assign(s, { levels: {}, studied: {}, notes: {}, showme: {}, mocks: [], route: {}, ready: {} }); touch(s); persist(); },
 
   level(key) { return this.active.levels[key] ?? 0; },
   setLevel(key, v) { const s = this.active; if (v) s.levels[key] = v; else delete s.levels[key]; touch(s); persist(); },
@@ -66,6 +69,12 @@ export const store = {
   },
   deleteMock(id) { const s = this.active; s.mocks = s.mocks.filter((m) => m.id !== id); touch(s); persist(); },
 
+  // Teaching route: session status 'doing' | 'done', and "ready to move on" ticks.
+  routeStatus(sid) { return this.active.route[sid] || 'none'; },
+  setRouteStatus(sid, v) { const s = this.active; if (v === 'none') delete s.route[sid]; else s.route[sid] = v; touch(s); persist(); },
+  isReady(key) { return !!this.active.ready[key]; },
+  toggleReady(key) { const s = this.active; if (s.ready[key]) delete s.ready[key]; else s.ready[key] = 1; touch(s); persist(); },
+
   exportStudent(id = state.activeId) {
     const s = state.students[id];
     return JSON.stringify({ app: 'driving-teaching', version: 2, exported: now(), student: s }, null, 2);
@@ -74,7 +83,7 @@ export const store = {
     const data = JSON.parse(text);
     const s = data.student;
     if (data.app !== 'driving-teaching' || !s || typeof s !== 'object' || !s.levels) throw new Error('This file is not a Driving Teaching backup.');
-    const clean = { ...blankStudent(String(s.name || 'Imported student').slice(0, 60)), levels: s.levels || {}, studied: s.studied || {}, notes: s.notes || {}, showme: s.showme || {}, mocks: Array.isArray(s.mocks) ? s.mocks : [] };
+    const clean = { ...blankStudent(String(s.name || 'Imported student').slice(0, 60)), levels: s.levels || {}, studied: s.studied || {}, notes: s.notes || {}, showme: s.showme || {}, mocks: Array.isArray(s.mocks) ? s.mocks : [], route: s.route || {}, ready: s.ready || {} };
     // If a profile with the same original id exists, replace it; otherwise add a new one.
     if (s.id && state.students[s.id]) { clean.id = s.id; }
     state.students[clean.id] = clean;
@@ -134,6 +143,12 @@ export function mockResult(m) {
   let d = 0, s = 0, x = 0;
   for (const v of Object.values(m.marks || {})) { d += v.d || 0; s += v.s || 0; x += v.x || 0; }
   return { d, s, x, pass: d <= 15 && !s && !x };
+}
+
+export function routeProgress(st = store.active) {
+  const done = SESSIONS.filter((x) => st.route?.[x.id] === 'done').length;
+  const current = SESSIONS.find((x) => st.route?.[x.id] === 'doing') || SESSIONS.find((x) => st.route?.[x.id] !== 'done') || null;
+  return { done, total: SESSIONS.length, pct: Math.round((done / SESSIONS.length) * 100), current };
 }
 
 /* ---------- Theme ---------- */
