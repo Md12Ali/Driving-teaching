@@ -1,0 +1,14 @@
+{
+  "name": "driving-teaching",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A to Z driving lesson curriculum, progress tracker, manoeuvre cheat-sheets, show me tell me trainer and mock test sheet for UK driving instructors and learners.",
+  "type": "module",
+  "scripts": {
+    "build:css": "node scripts/build-css.mjs",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.0"
+  }
+}

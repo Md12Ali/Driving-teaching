@@ -1,314 +1,61 @@
 <!doctype html>
-<html lang="en-GB" dir="ltr">
+<html lang="en-GB">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Driving Teaching · Learn to drive safely, A to Z</title>
-  <meta name="description" content="Learn to drive safely: simple steps, clear pictures and 3D practice in English, Bengali, Urdu, Hindi, Polish, Romanian and Arabic. Instructor tools for UK ADIs.">
-  <meta name="theme-color" content="#1c1f23">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>Driving Teaching · A to Z guide from first lesson to test pass</title>
+  <meta name="description" content="A to Z driving curriculum with pictures and examples, progress tracking, manoeuvre cheat-sheets, a Show me Tell me trainer and a mock test sheet. For UK driving instructors and their students.">
+  <meta name="theme-color" content="#1d5fae">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/diagrams.css">
-</head>
-<body class="mode-learner">
-  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
-
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a class="brand" href="#top" aria-label="Driving Teaching">
-        <span class="lplate" aria-hidden="true">L</span>
-        <span class="brand-name">Driving Teaching</span>
-      </a>
-      <div class="top-actions">
-        <label class="lang-pick">
-          <span class="sr-only" data-i18n="language">Language</span>
-          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3a15.7 15.7 0 0 0-1.3-3.9A8 8 0 0 1 18.9 8ZM12 4.1c.8 1.1 1.5 2.4 1.9 3.9h-3.8c.4-1.5 1.1-2.8 1.9-3.9ZM4.3 14a8 8 0 0 1 0-4h3.4a16.5 16.5 0 0 0 0 4H4.3Zm.8 2h3a15.7 15.7 0 0 0 1.3 3.9A8 8 0 0 1 5.1 16Zm3-8h-3a8 8 0 0 1 4.3-3.9C8.9 5.3 8.4 6.6 8.1 8ZM12 19.9c-.8-1.1-1.5-2.4-1.9-3.9h3.8c-.4 1.5-1.1 2.8-1.9 3.9Zm2.3-5.9H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4Zm.3 5.9c.6-1.2 1-2.5 1.3-3.9h3a8 8 0 0 1-4.3 3.9Zm1.7-5.9a16.5 16.5 0 0 0 0-4h3.4a8 8 0 0 1 0 4h-3.4Z"/></svg>
-          <select data-lang-select></select>
-        </label>
-        <button class="menu-btn" aria-expanded="false" aria-controls="nav" data-i18n="menu">Menu</button>
-      </div>
-      <nav id="nav" class="nav" aria-label="Main">
-        <a href="#topics" data-i18n="navLearn">Lessons</a>
-        <a href="#lab" data-i18n="navLab">3D practice</a>
-        <a href="#tools" data-i18n="navTools">In-car tools</a>
-        <a href="#part3-video">Part 3 video</a>
-        <a href="#stopping" data-i18n="navStop">Stopping</a>
-        <a href="#toolkit" class="instructor-only" data-i18n="navToolkit">Toolkit</a>
-        <a href="#planner" class="instructor-only" data-i18n="navPlanner">Lesson planner</a>
-        <a href="#part3" class="instructor-only" data-i18n="navPart3">Part 3 check</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="hero" id="top">
-      <canvas class="hero-canvas" aria-hidden="true"></canvas>
-      <div class="hero-shade" aria-hidden="true"></div>
-      <div class="wrap hero-content">
-        <p class="eyebrow" data-hero="eyebrow"></p>
-        <h1 data-hero="title"></h1>
-        <p class="lede" data-hero="lede"></p>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#topics" data-i18n="ctaTopics">Start the lessons</a>
-          <a class="btn btn-ghost" href="#lab" data-i18n="ctaLab">Try the 3D practice</a>
-        </div>
-        <div class="mode-switch" role="group" data-i18n-attr="aria-label:modeLabel">
-          <span class="mode-label" data-i18n="modeLabel">Show the site for</span>
-          <button data-mode="learner" aria-pressed="true" data-i18n="modeLearner">Learner</button>
-          <button data-mode="instructor" aria-pressed="false" data-i18n="modeInstructor">Instructor</button>
-        </div>
-        <dl class="stats">
-          <div><dt data-i18n="statTopics">Lessons</dt><dd data-count="topics">18</dd></div>
-          <div><dt data-i18n="statScenarios">3D scenarios</dt><dd>3</dd></div>
-          <div><dt data-i18n="statLanguages">Languages</dt><dd data-count="langs">7</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <section class="section" id="topics">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker" data-i18n="learnKicker">Lessons A to Z</p>
-          <h2 data-i18n="learnTitle">One lesson at a time</h2>
-          <p data-i18n="learnIntro"></p>
-        </header>
-        <div class="progress-bar" aria-live="polite"><span class="progress-fill" data-progress-fill></span><span class="progress-text" data-progress-text></span></div>
-        <div class="topic-tools">
-          <div class="chips" role="group" data-render="stage-chips"></div>
-          <label class="search">
-            <span class="sr-only" data-i18n="search">Search lessons</span>
-            <input type="search" data-topic-search data-i18n-attr="placeholder:searchPlaceholder">
-          </label>
-        </div>
-        <ol class="topic-grid" data-render="topics"></ol>
-        <p class="empty" data-topic-empty hidden data-i18n="noResults"></p>
-      </div>
-    </section>
-
-    <section class="section lab" id="lab">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker" data-i18n="labKicker">3D practice</p>
-          <h2 data-i18n="labTitle">Watch, pause and talk it through</h2>
-          <p data-i18n="labIntro"></p>
-        </header>
-        <div class="lab-shell" data-lab-root>
-          <div class="lab-tabs" role="tablist">
-            <button role="tab" data-scenario="tjunction" aria-selected="true" data-i18n="labT">T-junction</button>
-            <button role="tab" data-scenario="roundabout" aria-selected="false" data-i18n="labR">Roundabout</button>
-            <button role="tab" data-scenario="meeting" aria-selected="false" data-i18n="labM">Meeting traffic</button>
-          </div>
-          <div class="lab-main">
-            <div class="lab-stage">
-              <canvas class="lab-canvas"></canvas>
-              <div class="lab-status" data-lab-status data-i18n="loading3d">Loading 3D…</div>
-              <div class="lab-views" role="group">
-                <button data-view="overview" aria-pressed="true" data-i18n="overview">Overview</button>
-                <button data-view="driver" aria-pressed="false" data-i18n="driverView">Driver's view</button>
-              </div>
-              <p class="lab-caption" data-lab="caption" aria-live="polite"></p>
-            </div>
-            <aside class="lab-side">
-              <h3 data-lab="title"></h3>
-              <p class="lab-blurb" data-lab="blurb"></p>
-              <ol class="lab-steps" data-lab="steps"></ol>
-            </aside>
-          </div>
-          <div class="lab-controls">
-            <button class="btn btn-small btn-primary" data-lab="play" aria-pressed="false" data-i18n="play">Play</button>
-            <button class="btn btn-small" data-lab="restart" data-i18n="restart">Restart</button>
-            <input type="range" min="0" max="18" step="0.01" value="0" data-lab="scrub" data-i18n-attr="aria-label:timeline">
-            <span class="lab-time" data-lab="time">0.0s</span>
-            <button class="btn btn-small" data-lab="speed">1×</button>
-          </div>
-          <p class="lab-note" data-lab-fallback hidden data-i18n="no3d"></p>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section" id="tools">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker" data-i18n="toolsKicker">In-car tools</p>
-          <h2 data-i18n="toolsTitle">Use it in the car</h2>
-          <p data-i18n="toolsIntro"></p>
-        </header>
-        <div class="tool-cards">
-          <a class="tool-card" href="dashboard.html">
-            <span class="tool-art tool-art-dash" aria-hidden="true"><svg viewBox="0 0 320 180"><rect width="320" height="180" fill="#1c1f23"/><rect x="0" y="70" width="320" height="40" fill="#4a4e55"/><rect x="140" y="0" width="40" height="180" fill="#4a4e55"/><path d="M156 180 L156 110 C156 92 168 86 200 86 L320 86" stroke="#2bff88" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M160 150 L110 210 L210 210 Z" fill="rgba(63,169,255,.35)"/><rect x="148" y="126" width="16" height="28" rx="4" fill="#fffdf8"/><path d="M148 140 L118 128 L118 160 Z" fill="rgba(255,59,42,.45)"/><path d="M164 140 L194 128 L194 160 Z" fill="rgba(255,59,42,.45)"/><circle cx="40" cy="146" r="22" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="3"/><circle cx="40" cy="146" r="9" fill="#f2c230"/></svg></span>
-            <span class="tool-body"><strong data-i18n="dashName">3D teaching dashboard</strong><span data-i18n="dashDesc"></span><em data-i18n="openTool">Open</em></span>
-          </a>
-          <a class="tool-card" href="cockpit.html">
-            <span class="tool-art tool-art-ck" aria-hidden="true"><svg viewBox="0 0 320 180"><rect width="320" height="180" fill="#bfd6e3"/><rect y="104" width="320" height="76" fill="#4a4e55"/><path d="M0 0 H320 V40 H0 Z" fill="#2a2e34"/><path d="M0 120 C80 110 240 110 320 120 V180 H0 Z" fill="#1c1f23"/><path d="M30 40 L60 120" stroke="#1c1f23" stroke-width="12"/><path d="M290 40 L260 120" stroke="#1c1f23" stroke-width="12"/><rect x="128" y="46" width="64" height="18" rx="3" fill="#1c1f23"/><rect x="132" y="49" width="56" height="12" fill="#9cb7c7"/><circle cx="160" cy="160" r="40" fill="none" stroke="#111" stroke-width="10"/><circle cx="230" cy="98" r="7" fill="#d63a2f"/><rect x="226" y="104" width="8" height="14" fill="#d63a2f"/></svg></span>
-            <span class="tool-body"><strong data-i18n="cockpitName">Cockpit &amp; blind spot simulator</strong><span data-i18n="cockpitDesc"></span><em data-i18n="openTool">Open</em></span>
-          </a>
-        </div>
-      </div>
-    </section>
-    <section class="section" id="part3-video" lang="en" dir="ltr">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker">ADI Part 3 · model lesson</p>
-          <h2>Meeting oncoming traffic on narrow roads</h2>
-          <p>A full 3D model lesson, from meeting the examiner to the result: goal setting, risk agreement, a blind-bend intervention, prompts, independent driving and reflection. It runs about 16 minutes. Every rule in it was checked against GOV.UK, the DVSA test report form and the Highway Code in October 2026.</p>
-        </header>
-        <div class="p3v">
-          <div class="p3v-player">
-            <video controls preload="metadata" playsinline poster="media/adi-part3-poster.jpg" data-p3v>
-              <source src="media/adi-part3-model-lesson.mp4" type="video/mp4">
-            </video>
-            <div class="p3v-audio">
-              <p><strong>Revision audio (MP3).</strong> The same lesson, plus study chapters: route choice, handling errors, technical knowledge, the 17 competencies and a self-test with pauses.</p>
-              <audio controls preload="none" src="media/adi-part3-revision-audio.mp3"></audio>
-              <a class="btn btn-small" href="media/adi-part3-revision-audio.mp3" download>Download MP3</a>
-            </div>
-          </div>
-          <nav class="p3v-chapters" aria-label="Video chapters">
-            <p class="p3v-title">Chapters</p>
-            <ol>
-            <li><button type="button" data-seek="14"><span>0:14</span> Arriving at the test centre</button></li>
-            <li><button type="button" data-seek="68"><span>1:08</span> Today&#x27;s route (TomTom)</button></li>
-            <li><button type="button" data-seek="104"><span>1:44</span> Goal and risk (max 3 minutes)</button></li>
-            <li><button type="button" data-seek="301"><span>5:01</span> Kildowan Road</button></li>
-            <li><button type="button" data-seek="315"><span>5:15</span> Granton Road</button></li>
-            <li><button type="button" data-seek="359"><span>5:59</span> Green Lane</button></li>
-            <li><button type="button" data-seek="399"><span>6:39</span> Goodmayes Lane</button></li>
-            <li><button type="button" data-seek="413"><span>6:53</span> Trenance Gardens · the bend (FCPS)</button></li>
-            <li><button type="button" data-seek="479"><span>7:59</span> Westrow Gardens · back to the bend</button></li>
-            <li><button type="button" data-seek="504"><span>8:24</span> Levett Gardens</button></li>
-            <li><button type="button" data-seek="516"><span>8:36</span> Gyllyngdune Gardens</button></li>
-            <li><button type="button" data-seek="570"><span>9:30</span> Breamore Road and Oakwood Gardens</button></li>
-            <li><button type="button" data-seek="608"><span>10:08</span> Green Lane and New Road</button></li>
-            <li><button type="button" data-seek="633"><span>10:33</span> High Road</button></li>
-            <li><button type="button" data-seek="657"><span>10:57</span> Cameron Road roundabout</button></li>
-            <li><button type="button" data-seek="687"><span>11:27</span> Wards Road, Mafeking and Ladysmith Avenue</button></li>
-            <li><button type="button" data-seek="714"><span>11:54</span> Jamil on his own · Aldborough Road South</button></li>
-            <li><button type="button" data-seek="736"><span>12:16</span> High Road and Electric Parade</button></li>
-            <li><button type="button" data-seek="753"><span>12:33</span> Felbrigge Road</button></li>
-            <li><button type="button" data-seek="766"><span>12:46</span> Granton Road and back to Kildowan Road</button></li>
-            <li><button type="button" data-seek="778"><span>12:58</span> Pupil reflects (max 3 minutes)</button></li>
-            <li><button type="button" data-seek="848"><span>14:08</span> The examiner&#x27;s result</button></li>
-            <li><button type="button" data-seek="874"><span>14:34</span> Quick revision</button></li>
-            <li><button type="button" data-seek="913"><span>15:13</span> The 17 competencies</button></li>
-            </ol>
-          </nav>
-        </div>
-        <p class="fine">A proposed practice route around Goodmayes, Ilford, not an official test route. A teaching aid, not official guidance, and no lesson can guarantee a grade.</p>
-      </div>
-    </section>
-    <section class="section section-alt" id="stopping">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker" data-i18n="stopKicker">Stopping distances</p>
-          <h2 data-i18n="stopTitle">How far it takes to stop</h2>
-          <p data-i18n="stopIntro"></p>
-        </header>
-        <div class="stop-toggle chips" role="group">
-          <button class="chip" aria-pressed="true" data-surface="dry" data-i18n="dry">Dry road</button>
-          <button class="chip" aria-pressed="false" data-surface="wet" data-i18n="wet">Wet road (×2)</button>
-        </div>
-        <div class="stop-chart" data-render="stopping"></div>
-        <p class="legend"><span class="sw sw-think"></span> <span data-i18n="thinking">Thinking distance</span> <span class="sw sw-brake"></span> <span data-i18n="braking">Braking distance</span></p>
-      </div>
-    </section>
-
-    <section class="section instructor-only" id="toolkit" lang="en" dir="ltr">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker">Instructor · Teaching toolkit</p>
-          <h2>How to teach, before what to teach</h2>
-          <p>The same six habits run through every good lesson. Use them on a quiet estate road or a busy roundabout.</p>
-        </header>
-        <div class="method-grid" data-render="methods"></div>
-      </div>
-    </section>
-
-    <section class="section section-alt instructor-only" id="planner" lang="en" dir="ltr">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker">Instructor · Lesson planner</p>
-          <h2>Build a client-centred lesson plan</h2>
-          <p>Fill in the basics and get a structured plan with timings, a risk talk, key points and questions. Copy it or print it.</p>
-        </header>
-        <div class="planner">
-          <form class="planner-form" data-planner>
-            <label>Pupil's name <input name="pupil" autocomplete="off" placeholder="e.g. Jamil"></label>
-            <label>Topic <select name="topic" data-render="topic-options"></select></label>
-            <label>Pupil's confidence now (1–10)
-              <input name="confidence" type="range" min="1" max="10" value="5">
-              <output name="confOut">5</output>
-            </label>
-            <fieldset>
-              <legend>Level of help to start with</legend>
-              <label class="radio"><input type="radio" name="help" value="led" checked> Instructor-led</label>
-              <label class="radio"><input type="radio" name="help" value="prompted"> Prompted</label>
-              <label class="radio"><input type="radio" name="help" value="independent"> Pupil-led</label>
-            </fieldset>
-            <div class="row-2">
-              <label>Length
-                <select name="length"><option value="60">60 min</option><option value="90">90 min</option><option value="120" selected>120 min</option></select>
-              </label>
-              <label>Weather
-                <select name="weather"><option value="dry">Dry</option><option value="wet">Wet</option></select>
-              </label>
-            </div>
-          </form>
-          <article class="plan" data-plan aria-live="polite"></article>
-        </div>
-        <div class="plan-actions">
-          <button class="btn btn-small" data-plan-copy>Copy plan</button>
-          <button class="btn btn-small" data-plan-print>Print</button>
-          <span class="toast" data-toast role="status"></span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section instructor-only" id="part3" lang="en" dir="ltr">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="kicker">Instructor · Part 3 and standards check</p>
-          <h2>Score a lesson like the examiner</h2>
-          <p>Rate each of the 17 competencies from 0 to 3 after a practice lesson. Scores save in this browser only.</p>
-        </header>
-        <div class="p3">
-          <div class="p3-list" data-render="competencies"></div>
-          <aside class="p3-result" data-p3-result aria-live="polite"></aside>
-        </div>
-        <p class="fine">Bands from GOV.UK: 0–30 fail, 31–42 grade B, 43–51 grade A. Scoring 7 or less on risk management is a fail whatever the total. Always check the latest DVSA guidance.</p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="wrap footer-inner">
-      <p><span class="lplate small" aria-hidden="true">L</span> Driving Teaching. <span data-i18n="builtBy">Built by Mohammed Ali.</span></p>
-      <p class="fine" data-i18n="footerNote"></p>
-    </div>
-  </footer>
-
-  <dialog class="topic-dialog" data-topic-dialog aria-labelledby="dlg-title">
-    <div class="dlg-inner" data-topic-body></div>
-  </dialog>
-
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
   <script>
+    // Apply the saved theme before first paint (no flash).
     (function () {
-      var v = document.querySelector('[data-p3v]');
-      if (!v) return;
-      var btns = Array.prototype.slice.call(document.querySelectorAll('.p3v-chapters [data-seek]'));
-      btns.forEach(function (b) {
-        b.addEventListener('click', function () { v.currentTime = +b.dataset.seek; v.play(); });
-      });
-      v.addEventListener('timeupdate', function () {
-        var cur = null;
-        btns.forEach(function (b) { if (v.currentTime >= +b.dataset.seek) cur = b; });
-        btns.forEach(function (b) { b.setAttribute('aria-current', b === cur ? 'true' : 'false'); });
-      });
+      var t = 'system';
+      try { t = JSON.parse(localStorage.getItem('dt-theme')) || 'system'; } catch (e) {}
+      var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', dark);
     })();
   </script>
-  <script type="module" src="js/main.js"></script>
+</head>
+<body class="min-h-dvh bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-amber-300 focus:px-3 focus:py-2 focus:text-slate-900">Skip to content</a>
+
+  <div class="lg:grid lg:grid-cols-[260px_1fr] print:block">
+    <!-- Sidebar (tablet landscape and desktop) -->
+    <aside class="hidden print:hidden lg:flex lg:sticky lg:top-0 lg:h-dvh flex-col border-r border-slate-200 bg-white px-4 py-5 dark:border-slate-800 dark:bg-slate-900" aria-label="Main navigation">
+      <a href="#/" class="flex items-center gap-3 px-2">
+        <img src="assets/icons/favicon.svg" alt="" class="size-9">
+        <span class="leading-tight"><span class="block font-extrabold tracking-tight">Driving Teaching</span><span class="block text-xs text-slate-500 dark:text-slate-400">First lesson to test pass</span></span>
+      </a>
+      <nav class="mt-8 flex flex-col gap-1" data-nav="side"></nav>
+      <div class="mt-auto space-y-3 border-t border-slate-200 pt-4 dark:border-slate-800" data-side-foot></div>
+    </aside>
+
+    <div class="min-w-0">
+      <!-- Top bar -->
+      <header class="sticky top-0 z-30 print:hidden border-b border-slate-200/80 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+        <div class="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4">
+          <a href="#/" class="flex items-center gap-2 lg:hidden"><img src="assets/icons/favicon.svg" alt="" class="size-8"><span class="hidden font-extrabold tracking-tight min-[480px]:inline">Driving Teaching</span><span class="sr-only min-[480px]:hidden">Driving Teaching</span></a>
+          <p class="hidden truncate text-sm font-semibold text-slate-500 lg:block dark:text-slate-400" data-crumb></p>
+          <div class="ml-auto flex items-center gap-2" data-topbar></div>
+        </div>
+      </header>
+
+      <main id="main" class="mx-auto max-w-6xl px-4 pb-28 pt-5 lg:pb-12" tabindex="-1" data-app>
+        <noscript><p class="rounded-xl bg-amber-100 p-4 text-amber-900">This app needs JavaScript turned on.</p></noscript>
+      </main>
+    </div>
+  </div>
+
+  <!-- Bottom tab bar (phones and portrait tablets) -->
+  <nav class="fixed inset-x-0 bottom-0 z-30 print:hidden border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-900/95" aria-label="Main navigation" data-nav="bottom"></nav>
+
+  <div class="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 lg:bottom-6" aria-live="polite"><p class="pointer-events-auto hidden rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-lg dark:bg-white dark:text-slate-900" data-toast></p></div>
+
+  <script type="module" src="src/app.js"></script>
 </body>
 </html>
